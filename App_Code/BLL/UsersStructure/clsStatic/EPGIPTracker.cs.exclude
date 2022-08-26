@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Data;
+
+/// <summary>
+/// Summary description for EPGIPTracker
+/// </summary>
+//public class EPGIPTracker
+//{
+//    private static string m_sUserID;
+//    private static string m_sUserMail;
+
+//    static EPGIPTracker()
+//    {
+
+//        string sql = "SELECT IDUSERMGT, USERMAIL FROM EIP_USERMGT WHERE EIP_USERMGT.USERROLESID = '" + (int)appUsersRoles.userRole.EPG_IP_Tracker + "' ";
+//        sql += "AND STATUS = '" + IPStatus.Activated + "'";
+
+//        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+//        if (dt.Rows.Count > 0)
+//        {
+//            m_sUserID = dt.Rows[0]["IDUSERMGT"].ToString();
+//            m_sUserMail = dt.Rows[0]["USERMAIL"].ToString();
+//        }
+//    }
+
+//    public static string sUserID
+//    {
+//        get
+//        {
+//            return m_sUserID;
+//        }
+//    }
+
+//    public static string sUserMail
+//    {
+//        get
+//        {
+//            return m_sUserMail;
+//        }
+//    }
+//}
+
+
+public class EPGIPTrackerComment
+{
+    public EPGIPTrackerComment()
+    {
+
+    }
+
+    
+}

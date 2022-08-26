@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title></title>
+	</head>
+	<body>
+	    <br /><br />
+	    Dear Sir/Ma, <br/><br/>
+	    @@FULLNAME has submitted @@SUBJECT Investment Proposal.<br />
+        Please click <a href=@@URL?Proposalid=@@PROPOSALID>here</a> to access the system.<br /><br />
+        <div>
+            In case of any difficulty please contact @SSSADMIN or @@SSADMN <br/>
+            on ext. @@EXT or @@EMAIL
+        </div>
+	
+	</body>
+</html>

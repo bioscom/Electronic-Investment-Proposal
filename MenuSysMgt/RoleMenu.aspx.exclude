@@ -1,0 +1,102 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="true" CodeFile="RoleMenu.aspx.cs" Inherits="MenuSysMgt_RoleMenu" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+<br />
+    <table style="width: 90%">
+        <tr>
+            <td style="width:30%">
+ <table class="tMainBorder" style="width: 400px">
+        <tr>
+            <td class="cHeadTile" colspan="2">
+            
+                User Role Menu Options</td>
+        </tr>
+        <tr>
+                <td>
+                    <asp:Label ID="Label1" runat="server" Text="Title" Font-Bold="True"></asp:Label>
+                </td>
+                <td>
+                    <asp:TextBox ID="titleTextBox" runat="server" Width="300px"></asp:TextBox>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:Label ID="Label2" runat="server" Text="Description" Font-Bold="True"></asp:Label>
+                </td>
+                <td>
+                    <asp:TextBox ID="descTextBox" runat="server" TextMode="MultiLine" Width="300px" 
+                        Height="50px"></asp:TextBox>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;</td>
+                <td>
+                    <asp:Button ID="addButton" runat="server" onclick="addButton_Click" 
+                        Text="Add" Width="80px" />
+                </td>
+            </tr>
+    </table>
+    
+            </td>
+            <td>
+            <div style="margin-left:5px">
+        <asp:GridView id="grdView" runat="server" AutoGenerateColumns="False" 
+                      AllowPaging="True" Width="98%" PageSize="15" 
+            onpageindexchanging="grdView_PageIndexChanging" 
+            onrowcommand="grdView_RowCommand">
+            <Columns>
+            
+                <asp:TemplateField>
+                    <ItemTemplate>
+                       <%# Container.DataItemIndex + 1 %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            
+                <asp:TemplateField HeaderText="...">
+                    <ItemTemplate>
+                        <asp:LinkButton id="editLinkButton" runat="server" CommandName="EditThis" 
+                        CommandArgument='<%# Container.DisplayIndex %>' 
+                        IDMENUSYS='<%# DataBinder.Eval(Container.DataItem, "IDMENUSYS") %>' 
+                            Font-Bold="True" Font-Size="Small">Edit</asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField HeaderText="...">
+                    <ItemTemplate>
+                        <asp:LinkButton id="deleteLinkButton" runat="server" CommandName="DeleteThis"
+                        CommandArgument='<%# Container.DisplayIndex %>'
+                        IDMENUSYS='<%# DataBinder.Eval(Container.DataItem, "IDMENUSYS") %>' 
+                            Font-Bold="True" Font-Size="Small" 
+                            onclientclick="return confirm('Are you sure you want to delete this user?')">Delete</asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+                <asp:TemplateField HeaderText="Title">
+                    <ItemTemplate>
+                        <asp:Label id="labelformTitle" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMTITLE") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+                <%--<asp:TemplateField HeaderText="Form Navigate URL">
+                    <ItemTemplate>
+                        <asp:Label id="labelformURL" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMURL") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>--%>
+                
+                <asp:TemplateField HeaderText="Description">
+                    <ItemTemplate>
+                        <asp:Label id="labelformDesc" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMDESC") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+            </Columns>
+        </asp:GridView>
+            </div>
+            </td>
+        </tr>
+    </table>
+    
+    <br />
+</asp:Content>
+

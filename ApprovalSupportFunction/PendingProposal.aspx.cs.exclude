@@ -1,0 +1,195 @@
+﻿using System;
+using System.Data;
+using System.Web.UI.WebControls;
+
+public partial class ApprovalSupportFunction_PendingProposal : CustomBasePage
+{
+    SendMail MyMail = new SendMail();
+    eipUsers CurrentUser = new eipUsers();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        CurrentUser = new eipUsers(Apps.LoginIDNoDomain(User.Identity.Name));
+        LoadProposals();
+    }
+
+    protected void pendingProposalGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        string ProposalID = "";
+        string ButtonClicked = e.CommandName; //Determines which button was clicked (stores the name of each button)
+        int index = Convert.ToInt32(e.CommandArgument); //Command Argument stores the index of each row
+
+        //5. View Proposal
+
+        if (ButtonClicked == "ViewOriginalProposal")
+        {
+            LinkButton lbOriginalProposal = (LinkButton)pendingProposalGridView.Rows[index].FindControl("ViewOriginalProposalLinkButton");
+            ProposalID = lbOriginalProposal.Attributes["PROPOSALID"].ToString();
+            Response.Redirect("~/ViewProposal.aspx" + "?Proposalid=" + ProposalID, false);
+        }
+
+        //6. Add Comment
+
+        if (ButtonClicked == "AddComment")
+        {
+            LinkButton lbAddComment = (LinkButton)pendingProposalGridView.Rows[index].FindControl("AddCommentLinkButton");
+            ProposalID = lbAddComment.Attributes["PROPOSALID"].ToString();
+
+            if (CurrentUser.iUSERROLESID == eipUserRoles.iGMRegionalPlanning)
+            {
+                Response.Redirect("~/ApprovalSupportFunction/AddCommentGMREPlan.aspx" + "?Proposalid=" + ProposalID, false);
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iREVP)
+            {
+                Response.Redirect("~/ApprovalSupportFunction/AddCommentREVP.aspx" + "?Proposalid=" + ProposalID, false);
+            }
+            else if ((CurrentUser.iUSERROLESID == eipUserRoles.iVP) || (CurrentUser.iUSERROLESID == eipUserRoles.iMD))
+            {
+                Response.Redirect("~/ApprovalSupportFunction/AddCommentVPS.aspx" + "?Proposalid=" + ProposalID, false);
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iCorporatePlanningManager)
+            {
+                Response.Redirect("~/CPMIPMGT/Default.aspx" + "?Proposalid=" + ProposalID, false);
+            }
+            else
+            {
+                //Note: this else statement takes care of the following Approval roles (MD, Finance Signature, and other Support Functions)
+                Response.Redirect("~/ApprovalSupportFunction/AddComment.aspx" + "?Proposalid=" + ProposalID, false);
+            }
+        }
+
+        //7. Check Comment
+
+        if (ButtonClicked == "CheckComment")
+        {
+            LinkButton lbCheckComment = (LinkButton)pendingProposalGridView.Rows[index].FindControl("CheckCommentLinkButton");
+            ProposalID = lbCheckComment.Attributes["PROPOSALID"].ToString();
+            //Response.Redirect("~/ApprovalSupportFunction/CheckComments.aspx" + "?Proposalid=" + ProposalID, false);
+            Response.Redirect("~/Common/ViewProposalStatus.aspx" + "?Proposalid=" + ProposalID, false);
+        }
+
+        //8. Edit Proposal
+
+        if (ButtonClicked == "EditThisProposal")
+        {
+            LinkButton lbEditProposal = (LinkButton)pendingProposalGridView.Rows[index].FindControl("EditProposalLinkButton");
+            ProposalID = lbEditProposal.Attributes["PROPOSALID"].ToString();
+            Response.Redirect("~/EditIP.aspx" + "?Proposalid=" + ProposalID, false);
+        }
+
+        //9. Forward Proposal to My Email
+
+        if (ButtonClicked == "forwardProposal")
+        {
+            LinkButton lbForwardProposal = (LinkButton)pendingProposalGridView.Rows[index].FindControl("forwardProposalLinkButton");
+            ProposalID = lbForwardProposal.Attributes["PROPOSALID"].ToString();
+
+            Label lbDateInit = (Label)pendingProposalGridView.Rows[index].FindControl("labelDateInit");
+            Label lbDateForwarded = (Label)pendingProposalGridView.Rows[index].FindControl("labelDateForwarded");
+            Label lbProjectNumber = (Label)pendingProposalGridView.Rows[index].FindControl("labelProjectNumber");
+            Label lbProjectTitle = (Label)pendingProposalGridView.Rows[index].FindControl("labelProjectTitle");
+            Label lbInitiator = (Label)pendingProposalGridView.Rows[index].FindControl("labelInitiator");
+
+            MyMail.ForwardIP(ProposalID, lbDateInit.Text, lbDateForwarded.Text, lbProjectNumber.Text, lbProjectTitle.Text, lbInitiator.Text, CurrentUser.sUSERMAIL);
+        }
+    }
+
+    protected void pendingProposalGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        pendingProposalGridView.PageIndex = e.NewPageIndex;
+
+        LoadProposals();
+    }
+
+    private void LoadProposals()
+    {
+        if (!IsPostBack)
+        {
+            DataTable ds = new DataTable();
+            if (CurrentUser.iUSERROLESID == eipUserRoles.iLineTeamLead)
+            {
+                LineTeamLeadComments ltl = new LineTeamLeadComments();
+                ds = ltl.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iBusinessProcessOwner)
+            {
+                BPOComments BPO = new BPOComments();
+                ds = BPO.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iGMRegionalPlanning)
+            {
+                GMREPLANComments GMREPLAN = new GMREPLANComments();
+                ds = GMREPLAN.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iFinanceSignature)
+            {
+                FinanceSignatureComments FinSig = new FinanceSignatureComments();
+                ds = FinSig.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iREVP)
+            {
+                REVPComments REVP = new REVPComments();
+                ds = REVP.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if ((CurrentUser.iUSERROLESID == eipUserRoles.iVP) && (CurrentUser.Function != cpdmsFunctionsNames.Finance))
+            {
+                VPComments VP = new VPComments();
+                ds = VP.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if ((CurrentUser.iUSERROLESID == eipUserRoles.iVP) && (CurrentUser.Function == cpdmsFunctionsNames.Finance))
+            {
+                VPFinanceComments VPFin = new VPFinanceComments();
+                ds = VPFin.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iMD)
+            {
+                MDComments MD = new MDComments();
+                ds = MD.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if ((CurrentUser.iUSERROLESID == eipUserRoles.iGM) && (CurrentUser.Function == cpdmsFunctionsNames.Finance))
+            {
+                GMFinanceComments GMFiN = new GMFinanceComments();
+                ds = GMFiN.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if ((CurrentUser.iUSERROLESID == eipUserRoles.iGM) && (CurrentUser.Function != cpdmsFunctionsNames.Finance))
+            {
+                GMComments GM = new GMComments();
+                ds = GM.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else if (CurrentUser.iUSERROLESID == eipUserRoles.iCorporatePlanningManager)
+            {
+                CorporatePlanningManager cpm = new CorporatePlanningManager();
+                ds = cpm.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+            else
+            {
+                //For Support Functions and others
+                FunctionalSupportComments FuncSupport = new FunctionalSupportComments();
+                ds = FuncSupport.MyPendingProposal(CurrentUser.iIDUSERMGT.ToString());
+            }
+
+            pendingProposalGridView.DataSource = ds;
+            pendingProposalGridView.DataBind();
+
+            if (ds.Rows.Count == 0)
+            {
+                MessageBox.Show("No Pending Proposal Found!!!");
+            }
+            else if (ds.Rows.Count > 0) //Display LinkButtons to be visible according to the Proposal Logic
+            {
+                foreach (GridViewRow grdRow in pendingProposalGridView.Rows)
+                {
+                    LinkButton EditProposal = (LinkButton)pendingProposalGridView.Rows[grdRow.RowIndex].FindControl("EditProposalLinkButton");
+                    if (CurrentUser.iUSERROLESID == eipUserRoles.iLineTeamLead)
+                    {
+                        EditProposal.Enabled = true; // Can edit Proposal
+                    }
+                    else
+                    {
+                        EditProposal.Enabled = false; // Can not edit Proposal
+                    }
+                }
+            }
+        }
+    }
+}

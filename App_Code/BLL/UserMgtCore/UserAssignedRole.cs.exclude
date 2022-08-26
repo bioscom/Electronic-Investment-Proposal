@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+
+public class UserAssignedRole
+{
+    public string m_sIDASSIGNEDROLES { get; set; }
+    public string m_sUSERNAME { get; set; }
+    public string m_sFUNCTIONID { get; set; }
+    public int m_iIDIPLIMIT { get; set; }
+    public string m_sFULLNAME { get; set; }
+    public string m_sUSERMAIL { get; set; }
+    public int m_iCOMPANYID { get; set; }
+    public string m_sROLEID { get; set; }
+    public string m_sROLES { get; set; }
+    public string m_sCOMPANYNAME { get; set; }
+    public string m_sFunction { get; set; }
+    public string m_sEPNIGERIALOGIC { get; set; }
+
+    public UserAssignedRole()
+    {
+
+    }
+
+    public UserAssignedRole(string UserName)
+    {
+        string sql = "SELECT EIP_ASSIGNEDROLES.IDASSIGNEDROLES, EIP_ASSIGNEDROLES.USERNAME, EIP_ASSIGNEDROLES.FUNCTIONID, EIP_ASSIGNEDROLES.IDIPLIMIT, ";
+        sql += "EIP_ASSIGNEDROLES.FULLNAME, EIP_ASSIGNEDROLES.USERMAIL, CPDMS_SHELLCOMPANIES.COMPANYNAME, ";
+        sql += "EIP_USERROLES.ROLES, EIP_ASSIGNEDROLES.EPNIGERIALOGIC, CPDMS_FUNCTIONS.FUNCTION, EIP_ASSIGNEDROLES.COMPANYID, ";
+        sql += "EIP_ASSIGNEDROLES.USERROLESID ";
+        sql += "FROM EIP_ASSIGNEDROLES INNER JOIN ";
+        sql += "CPDMS_SHELLCOMPANIES ON EIP_ASSIGNEDROLES.COMPANYID = CPDMS_SHELLCOMPANIES.COMPANYID INNER JOIN ";
+        sql += "EIP_USERROLES ON EIP_ASSIGNEDROLES.USERROLESID = EIP_USERROLES.USERROLESID INNER JOIN ";
+        sql += "CPDMS_FUNCTIONS ON EIP_ASSIGNEDROLES.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID ";
+        sql += "WHERE (USERNAME = '" + UserName + "')";
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+        if (dt.Rows.Count > 0)
+        {
+            m_sIDASSIGNEDROLES = dt.Rows[0]["IDASSIGNEDROLES"].ToString();
+            m_sUSERNAME = dt.Rows[0]["USERNAME"].ToString();
+            m_sFUNCTIONID = dt.Rows[0]["FUNCTIONID"].ToString();
+            m_iIDIPLIMIT = Convert.ToInt32(dt.Rows[0]["IDIPLIMIT"]);
+            m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+            m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+            m_iCOMPANYID = Convert.ToInt32(dt.Rows[0]["COMPANYID"]);
+            m_sROLEID = dt.Rows[0]["USERROLESID"].ToString();
+            m_sROLES = dt.Rows[0]["ROLES"].ToString();
+            m_sCOMPANYNAME = dt.Rows[0]["COMPANYNAME"].ToString();
+            m_sEPNIGERIALOGIC = dt.Rows[0]["EPNIGERIALOGIC"].ToString();
+            m_sFunction = dt.Rows[0]["FUNCTION"].ToString();
+        }
+    }
+
+    public UserAssignedRole(DataRow dr)
+    {
+        m_sIDASSIGNEDROLES = dr["IDASSIGNEDROLES"].ToString();
+        m_sUSERNAME = dr["USERNAME"].ToString();
+        m_sFUNCTIONID = dr["FUNCTIONID"].ToString();
+        m_iIDIPLIMIT = Convert.ToInt32(dr["IDIPLIMIT"]);
+        m_sFULLNAME = dr["FULLNAME"].ToString();
+        m_sUSERMAIL = dr["USERMAIL"].ToString();
+        m_iCOMPANYID = Convert.ToInt32(dr["COMPANYID"]);
+        m_sROLEID = dr["USERROLESID"].ToString();
+        m_sROLES = dr["ROLES"].ToString();
+        m_sCOMPANYNAME = dr["COMPANYNAME"].ToString();
+        m_sEPNIGERIALOGIC = dr["EPNIGERIALOGIC"].ToString();
+        m_sFunction = dr["FUNCTION"].ToString();
+    }
+}

@@ -1,0 +1,21 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>e-IP Processing FYI/A: </title>
+	</head>
+	<body>
+	        <br /><br />
+            Dear Sir/Ma,<br /><br />
+            This is to inform you that an Investment Proposal for <b>@@SUBJECT</b> <br/>
+            has just been submitted by  @@IPINITIATOR for processing.<br />
+            The Line Team Lead role is @@LINETEAMLEAD.<br />
+            <br /> 
+            Please contact the BPO, if necessary for more information.<br/><br/>
+            <a href='http://sww-knowledge-epg.shell.com/knowtepg1/llisapi.dll?func=ll&objId=12102069&objAction=Open&viewType=1&nexturl=%2Fknowtepg1%2Fllisapi%2Edll%3Ffunc%3Dll%26objId%3D12093961%26objAction%3Dbrowse%26sort%3Dname%26viewType%3D1'>What is e-IP?</a><br />
+            <br/>
+            <div>
+                In case of any difficulty please contact @SSSADMIN <br/>
+                on ext. @@EXT or @@EMAIL
+            </div>
+	</body>
+</html>

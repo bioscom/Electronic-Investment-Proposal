@@ -1,0 +1,137 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Data;
+using System.Web.UI.WebControls;
+
+
+/// <summary>
+/// Summary description for Reports
+/// </summary>
+public class eIPReport
+{
+    public eIPReport()
+	{
+		
+	}
+
+    public string ApprovedIPsByYearOfApproval(string YYear)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,  EIP_PROPOSAL.JV, ";
+        //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, EIP_PROPOSAL.SS, EIP_PROPOSAL.DOC_STAND, EIP_USERROLES.USERROLESID, ";
+        //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_USERROLES.ROLES, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS, ";
+        //sql += "TO_CHAR(EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT, EIP_SUPPORTAPPROVERCOMMENTS.STAND ";
+        //sql += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERROLES WHERE EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL ";
+        //sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.ROLEID = EIP_USERROLES.USERROLESID ";
+
+        //sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.STAND = '" + SupportState.iApproved + "' ";
+        //sql += "AND ((EIP_USERROLES.ROLES = '" + eipUserRoles.REVP + "') OR (EIP_USERROLES.ROLES = '" + eipUserRoles.VP + "') OR (EIP_USERROLES.ROLES = '" + eipUserRoles.MD + "')) ";
+        //sql += "AND (TO_CHAR(TO_DATE(EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT, 'DD-MON-YY') ,'YYYY') = '" + YYear + "') ORDER BY PROJ_NUM";
+
+        return sql;
+    }
+
+    public string MasterReporter(string ReportType, string OU, string FunctionID, string AmountSS, string FinanceApproverID, string OrganisationalApproverID, string fromDate, string ToDate)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,  EIP_PROPOSAL.JV, EIP_PROPOSAL.SS,  ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY') AS DATE_INIT, EIP_PROPOSAL.DOC_STAND, EIP_USERROLES.USERROLESID, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY') AS DATE_SUBMIT, EIP_USERROLES.ROLES, TO_CHAR(EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT, 'DD-MON-YYYY') AS DATE_COMMENT, ";
+        sql += "EIP_SUPPORTAPPROVERCOMMENTS.STAND, EIP_USERMGT.FULLNAME, CPDMS_FUNCTIONS.FUNCTION ";
+        sql += "FROM EIP_USERMGT, CPDMS_FUNCTIONS, EIP_SUPPORTAPPROVERCOMMENTS, EIP_PROPOSAL, EIP_USERROLES ";
+        sql += "WHERE (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) AND (EIP_USERMGT.IDUSERMGT = EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT) ";
+        sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL) AND (EIP_SUPPORTAPPROVERCOMMENTS.ROLEID = EIP_USERROLES.USERROLESID) ";
+
+        sql += MasterQueryDetails(ReportType, OU, FunctionID, AmountSS, FinanceApproverID, OrganisationalApproverID, fromDate, ToDate);
+
+        return sql;
+    }
+
+    private string MasterQueryDetails(string ReportType, string OU, string FunctionID, string AmountSS, string FinanceApproverID, string OrganisationalApproverID, string fromDate, string ToDate)
+    {
+        string sql = "";
+        //if (ReportType == "Approved IPs")
+        //{
+        //    sql += " AND ((EIP_PROPOSAL.DOC_STAND = '" + SupportState.iApproved + "') AND EIP_PROPOSAL.DATE_LAST_ACTIONED BETWEEN TO_DATE('" + fromDate + "', 'MM-DD-YYYY') AND TO_DATE('" + ToDate + "', 'MM-DD-YYYY')) ";
+        //    sql += "OR (EIP_PROPOSAL.SS = '" + AmountSS + "') OR (CPDMS_FUNCTIONS.FUNCTIONID = '" + FunctionID + "') OR (EIP_PROPOSAL.ACTIONED_BY = '" + OrganisationalApproverID + "' ) )";
+        //}
+        //else if (ReportType == "IPs in progress")
+        //{
+
+        //}
+        //else if (ReportType == "IPs Not yet actioned")
+        //{
+
+        //}
+        return sql;
+    }
+
+    //Finance Approvers
+    //Get all Finance Approvers
+    public void FinanceApprovers(string OrganisationUnitID, DropDownList FinanceApproverDropDown)
+    {
+        string sql = "SELECT EIP_USERMGT.FULLNAME, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT, CPDMS_FUNCTIONS ";
+        sql += "WHERE (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) AND (EIP_USERMGT.COMPANYID = '" + OrganisationUnitID + "') ";
+        sql += "AND (EIP_USERMGT.USERROLESID LIKE '%" + (int)appUsersRoles.userRole.Finance_Signature + "%' ";
+        sql += "OR (EIP_USERMGT.USERROLESID LIKE '%" + (int)appUsersRoles.userRole.VP + "%' AND CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "') ";
+        sql += "OR (EIP_USERMGT.USERROLESID LIKE '%" + (int)appUsersRoles.userRole.Finance_Director + "%' AND CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "')) ";
+        sql += "AND EIP_USERMGT.STATUS = '" + IPStatus.Activated + "'";
+
+        db.FillDBL(FinanceApproverDropDown, sql);
+    }
+    
+
+    ////2. Approved IPs
+    //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,  EIP_PROPOSAL.JV,  ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, EIP_PROPOSAL.SS, EIP_PROPOSAL.DOC_STAND, EIP_USERROLES.USERROLESID,  ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_USERROLES.ROLES, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS,  ";
+    //sql += "TO_CHAR(EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT, EIP_SUPPORTAPPROVERCOMMENTS.STAND  ";
+    //sql += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERROLES  ";
+    //sql += "WHERE EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL  ";
+    //sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.ROLEID = EIP_USERROLES.USERROLESID AND EIP_SUPPORTAPPROVERCOMMENTS.STAND = '3'  ";
+    //sql += "AND ((EIP_USERROLES.ROLES = 'REVP') OR (EIP_USERROLES.ROLES = 'VP') OR (EIP_USERROLES.ROLES = 'MD'))  ";
+    //sql += "AND (SS > '20')  ORDER BY PROJ_NUM ";
+
+    ////3. IPs in Progress <= Third Quartile
+    //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,  EIP_PROPOSAL.JV, ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, EIP_PROPOSAL.SS, EIP_PROPOSAL.DOC_STAND,  ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT FROM EIP_PROPOSAL  ";
+    //sql += "WHERE (EIP_PROPOSAL.SS > '20') AND EIP_PROPOSAL.DOC_STAND ='4' ORDER BY EIP_PROPOSAL.IDPROPOSAL ";
+
+    ////4. Overdue IPs by Function
+    //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,  EIP_PROPOSAL.JV, ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, EIP_PROPOSAL.SS, EIP_PROPOSAL.DOC_STAND, ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS, ";
+    //sql += "TO_CHAR(EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT, EIP_SUPPORTAPPROVERCOMMENTS.STAND ";
+    //sql += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS WHERE EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL ";
+    //sql += "AND EIP_PROPOSAL.FUNCTIONID = '7' ";
+    //sql += "AND (ABS(TO_CHAR(SYSDATE, 'IW') - TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'IW')) >'1' ) ";
+    //sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.STAND = '2')";
+
+    ////5. IP by Originating Function
+    //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE,   ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, EIP_PROPOSAL.JV, EIP_PROPOSAL.SS,  ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_PROPOSAL.BOM, EIP_PROPOSAL.date_actioned AS DATE_APPROVED,  ";
+    //sql += "EIP_PROPOSAL.actioned_by, eip_usermgt.fullname AS APPROVED_BY ";
+    //sql += "FROM EIP_PROPOSAL, eip_usermgt WHERE (EIP_PROPOSAL.actioned_by = eip_usermgt.idusermgt)  ";
+    //sql += "and eip_proposal.doc_stand = '3'  ";
+    //sql += "and EIP_PROPOSAL.FUNCTIONID = '7'  ";
+
+    ////6. IP By Originating OU
+    //string sql = "SELECT IDPROPOSAL, PROJ_NUM, PROJ_TITLE, PROJ_INIT, TO_CHAR(DATE_INIT, 'DD-MON-YYYY')DATE_INIT, JV, SS,  ";
+    //sql += "TO_CHAR(DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT FROM  EIP_PROPOSAL WHERE COMPANYID = '1'";
+
+    ////7. IP By Financial Approver
+    //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_USERMGT.FULLNAME, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, EIP_PROPOSAL.SS, ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT,  EIP_PROPOSAL.JV, ";
+    //sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_SUPPORTAPPROVERCOMMENTS.STAND, EIP_USERMGT.IDUSERMGT ";
+    //sql += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS ";
+    //sql += "WHERE (EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL) ";
+    //sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) AND (EIP_USERMGT.IDUSERMGT = '894') ";
+    //sql += "AND (EIP_USERMGT.USERROLESID LIKE '%Finance Signature%' OR ((EIP_USERMGT.USERROLESID = 'GM') AND (CPDMS_FUNCTIONS.FUNCTION = 'Finance')) ";
+    //sql += "OR (EIP_USERMGT.USERROLESID = 'VP') AND (CPDMS_FUNCTIONS.FUNCTION = 'Finance')) ";
+    //sql += "AND TO_CHAR(TO_DATE(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YY') ,'YYYY') = '2010'";
+
+    //eIPReports reporter = new eIPReports();
+    //reporter.GenerateXMLSchemas(sql, "IPByFinancialApprover", "IPByFinancialApprover", "IPByFinancialApprover");
+}

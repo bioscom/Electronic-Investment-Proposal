@@ -1,0 +1,142 @@
+﻿using System.Web.UI.WebControls;
+using System.Data;
+using System.Web;
+
+
+public class AddCommentController
+{
+   
+
+    string comment = ""; string dateRev = "";
+
+    Label SupportLabel = new Label();
+    Label WarningLabel = new Label();
+    TextBox DateRevTextBox = new TextBox();
+    TextBox CommentTxt = new TextBox();
+    Button digiSignButton = new Button();
+    DropDownList SupportStand = new DropDownList();
+
+    public AddCommentController(Proposal proposal, eipUsers CurrentUser, Label _SupportLabel, TextBox _DateRevTextBox, Button _digiSignButton, TextBox _Comment, DropDownList _SupportStand, Label _warningLabel)
+    {
+        SupportLabel = _SupportLabel;
+        WarningLabel = _warningLabel;
+        DateRevTextBox = _DateRevTextBox;
+        digiSignButton = _digiSignButton;
+        CommentTxt = _Comment;
+        SupportStand = _SupportStand;
+
+        //stand = SupportStand.SelectedItem.Text;
+        if (CommentTxt.Text != "") { comment = CommentTxt.Text.Replace("'", "''"); }
+        else { comment = null; }
+        dateRev = DateRevTextBox.Text;
+    }
+
+    #region Page Load Region
+
+    public void PageLoad(Proposal proposal, eipUsers CurrentUser)
+    {
+        FunctionalSupportComments FuncSupportResult = new FunctionalSupportComments();
+        LineTeamLeadComments LTL = new LineTeamLeadComments();
+        //For Line Team Lead Support
+        if (CurrentUser.iUSERROLESID == eipUserRoles.iLineTeamLead)
+        {
+            LTL = new LineTeamLeadComments(proposal.IDPROPOSAL);
+            SupportLabel.Text = eipUserRoles.LineTeamLead;
+            CommentTxt.Text = LTL.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iHSESupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.HSESupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iSPCASupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.SPCASupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iControllers)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.Controllers;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iEconomicsSupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.EconomicsSupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iFinanceSignature)
+        {
+            SupportLabel.Text = eipUserRoles.FinanceSignature;
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = true;
+            WarningLabel.Visible = true;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iGM)
+        {
+            SupportLabel.Text = eipUserRoles.GM;
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = true;
+            WarningLabel.Visible = true;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iLEGALSupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.LEGALSupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iTAXSupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.TAXSupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iTreasurySupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.TreasurySupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+        else if (CurrentUser.iUSERROLESID == eipUserRoles.iSecuritySupport)
+        {
+            FuncSupportResult = new FunctionalSupportComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+            SupportLabel.Text = eipUserRoles.SecuritySupport;
+            CommentTxt.Text = FuncSupportResult.sCOMMENTS;
+
+            digiSignButton.Visible = false;
+            WarningLabel.Visible = false;
+        }
+    }
+    #endregion
+}

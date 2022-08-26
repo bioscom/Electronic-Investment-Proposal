@@ -1,0 +1,119 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="True" CodeFile="MyComments.aspx.cs" Inherits="ApprovalSupportFunction_MyComments" Title="Electronic Investment Proposal" %>
+
+<asp:Content id="Content1" ContentPlaceHolderid="ContentPlaceHolder1" Runat="Server">
+    <table style="width:850px" class="tMainBorder">
+        <tr>
+            <td colspan="4" class="cHeadTile">
+                <asp:Label id="Label1" runat="server" Font-Bold="True" 
+                    Text="My Comments" ForeColor="#003366"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:100px">
+                <asp:Label id="Label2" runat="server" Text="IP Number:" Font-Bold="True"></asp:Label>
+            </td>
+            <td style="width:200px">
+                <asp:Label id="projNumberLabel" runat="server"></asp:Label>
+            </td>
+            <td style="width:100px">
+                <asp:Label id="Label3" runat="server" Text="Project Title:" Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="projTitleLabel" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <asp:Label id="Label5" runat="server" Text="Date Initiated:" Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="dateInitLabel" runat="server"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="Label6" runat="server" Text="Date Submitted:" Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="dateSubmitLabel" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <asp:Label id="Label29" runat="server" Text="Amount JV ($mln):" 
+                    Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="AmountJVLabel" runat="server" Font-Bold="True" 
+                    ForeColor="#006600"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="Label30" runat="server" Text="Amount SS ($mln):" 
+                    Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="AmountSSLabel" runat="server" Font-Bold="True" 
+                    ForeColor="#006600"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <asp:Label id="Label4" runat="server" Text="Initiator" Font-Bold="True"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="initiatorLabel" runat="server"></asp:Label>
+            </td>
+            <td>
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="4">
+            <center>
+                    <asp:Button ID="backButton" runat="server" Text="Previous Page" 
+                    onclick="backButton_Click" />
+            </center>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+            <div style="background-color:White">
+            
+    <asp:GridView id="MyCommentsGridView" runat="server" AutoGenerateColumns="False" Width="100%">
+    <Columns>
+    
+        <asp:TemplateField>
+            <ItemTemplate>
+               <%# Container.DataItemIndex + 1 %>
+            </ItemTemplate>
+        </asp:TemplateField>
+   
+        <asp:TemplateField HeaderText="Stand">
+            <ItemTemplate>
+                <asp:Label id="labelStand" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "STAND") %>'></asp:Label>
+            </ItemTemplate>
+        </asp:TemplateField>
+                
+        <asp:TemplateField HeaderText="Comment">
+            <ItemTemplate>
+                <asp:Label id="labelDateForwarded" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "COMMENTS") %>'></asp:Label>
+            </ItemTemplate>
+        </asp:TemplateField>
+        
+        <asp:TemplateField HeaderText="Date">
+            <ItemTemplate>
+                <asp:Label id="labelProjectNumber" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "DATE_COMMENT") %>'></asp:Label>
+            </ItemTemplate>
+        </asp:TemplateField>
+        
+    </Columns>
+    </asp:GridView>
+            
+            </div>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="cHeadTile">
+                &nbsp;</td>
+        </tr>
+        </table>
+    </asp:Content>

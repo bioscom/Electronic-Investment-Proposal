@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Web;
+
+///
+/// This update is made on 30/12/2009
+/// This is called from EditIP.aspx.cs code, to carry out the instruction stated there
+/// 
+///                  This is a new update... (30/12/2009)
+///When an update is made to an IP, as a result of comments from Support functions and Approvers.
+///Any reload of the IP into the system should trigger an email to the BPO and System Administrator 
+///and all who were selected to suppport the IP of the latest update made to the IP, 
+///informing them to expect an email from the BPO for another support to the IP.
+///
+
+public class IPUpdateReloadProcedure
+{
+    string[] BPOEmail = { "" };
+    string[] LineTeamLeadEmail = { "" };
+    string[] IPInitiatorEmail = { "" };
+    string[] toEmail = new string[0];
+
+    public IPUpdateReloadProcedure()
+    {
+
+    }
+
+    
+}

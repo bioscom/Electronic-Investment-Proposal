@@ -1,0 +1,313 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+
+
+
+namespace IP.MenuSysMgt
+{
+    public partial class FormAccessControl : CustomBasePage
+    {
+       
+        public string ItemValue, ItemText;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            
+            if (!IsPostBack)
+            {
+                LoadUserRoles();
+
+                bindData();              
+
+                addFuncButton.Enabled = false;
+                removeFunctionButton.Enabled = false;
+
+                //HideObjects();
+            }
+        }
+
+        private void LoadUserRoles()
+        {
+            string sql = "SELECT ROLES, USERROLESID FROM EIP_USERROLES";
+            db.FillDBL(userRoleDropDownList, sql);
+        }
+
+        private void bindData()
+        {
+            string sql = "SELECT IDMENUSYS, FORMTITLE, FORMURL, FORMDESC FROM EIP_MENUSYSTEM";
+
+            DataSet ds = db.SelectQuery(sql);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                formsGridView.DataSource = ds;
+                formsGridView.DataBind();
+
+                //foreach (GridViewRow grdView in formsGridView.Rows)
+                //{
+                //    LinkButton lbDelete = (LinkButton)grdView.FindControl("deleteLinkButton");
+                //    Label lbformTitle = (Label)grdView.FindControl("labelformTitle");
+                //    lbDelete.Attributes.Add("onClick", "return DeleteProject('" + lbformTitle.Text + "')");
+                //}
+            }
+            else
+            {
+                MessageBox.Show("No Record found!!!");
+            }
+        }
+
+        protected void userRoleDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (userRoleDropDownList.SelectedValue != "-1")
+            {
+                addFuncButton.Enabled = true;
+                removeFunctionButton.Enabled = true;
+            }
+            else
+            {
+                addFuncButton.Enabled = false;
+                removeFunctionButton.Enabled = false;
+            }
+
+            //LoadUserAccessLists();
+            LoadSelectedRoleFunctionalies();
+            //HideObjects();
+        }
+
+        private void LoadSelectedRoleFunctionalies()
+        {
+            DataSet ds = new DataSet();
+            if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.SystemAdministrator)
+            {
+                //Load Menu for Sys Admin
+                string sqlAdmin = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_SYSADMINMENU";
+                ds = db.SelectQuery(sqlAdmin);
+            }
+            else if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.BusinessProcessOwner)
+            {
+                //Load Menu for BPO
+                string sqlBPO = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_BPOMENU";
+                ds = db.SelectQuery(sqlBPO);
+            }
+            else if ((userRoleDropDownList.SelectedItem.Text == eipUserRoles.REVP) || (userRoleDropDownList.SelectedItem.Text == eipUserRoles.VP) || (userRoleDropDownList.SelectedItem.Text == eipUserRoles.MD) || (userRoleDropDownList.SelectedItem.Text == eipUserRoles.FinanceSignature))
+            {
+                //Load the Menu for Approval People
+                string sqlApproval = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_APPROVALSUPPORTMENU";
+                ds = db.SelectQuery(sqlApproval);
+            }
+            else if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.GMRegionalPlanning)
+            {
+                //Load the Menu for GM Regional Planning
+                string sqlGMREPlan = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_GMREPLANMENU";
+                ds = db.SelectQuery(sqlGMREPlan);
+            }
+            else if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.IPInitiator)
+            {
+                //Load Menu for IP Initiator
+                string sqlIPInitiator = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_IPINITIATORMENU";
+                ds = db.SelectQuery(sqlIPInitiator);
+            }
+            else if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.BOM)
+            {
+                //Load Menu for BOM
+                string sqlBOM = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_BOMMENU";
+                ds = db.SelectQuery(sqlBOM);
+            }
+            else if (userRoleDropDownList.SelectedItem.Text == eipUserRoles.EPGIPTracker)
+            {
+                //Load Menu for BOM
+                string sqlBOM = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_EPGIPTRACKER";
+                ds = db.SelectQuery(sqlBOM);
+            }
+            else
+            {
+                //Load the Menu for Functional Support People
+                string sqlFunctionalSupport = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_FSUPPORTMENU";
+                ds = db.SelectQuery(sqlFunctionalSupport);
+            }
+
+            removeRoleGridView.DataSource = ds;
+            removeRoleGridView.DataBind();
+        }
+
+       
+
+        private void LoadForms()
+        {
+            string sql = "SELECT FORMTITLE, IDMENUSYS, FORMURL, FORMDESC FROM EIP_MENUSYSTEM";
+            db.FillDBLSpecial(userRoleDropDownList, sql);
+        }
+
+        protected void addFuncButton_Click(object sender, EventArgs e)
+        {
+            //HideObjects();
+            //rolesPanel.Visible = true;
+        }
+
+        protected void removeFunctionButton_Click(object sender, EventArgs e)
+        {
+            //HideObjects();
+            //removeRolePanel.Visible = true;
+
+            //LoadUserAccessLists();
+        }
+
+        //protected void AddButton_Click(object sender, EventArgs e)
+        //{
+        //    foreach (ListItem li in eipformsListBox.Items)
+        //    {
+        //        if (li.Selected == true)
+        //        {
+        //            ItemText = li.Text; ItemValue = li.Value;
+        //            roleFormListBox.Items.Add(new ListItem(ItemText, ItemValue));
+        //        }
+        //    }
+        //}
+
+        //protected void removeButton_Click(object sender, EventArgs e)
+        //{
+        //    roleFormListBox.Items.RemoveAt(roleFormListBox.SelectedIndex);
+        //}
+
+        protected void formsGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            formsGridView.PageIndex = e.NewPageIndex;
+            bindData();
+        }
+
+        protected void submitButton_Click(object sender, EventArgs e)
+        {
+            //string sqll = ""; string sqlInsert = "";
+            //DataSet dssqll = new DataSet();
+
+            //foreach (ListItem li in roleFormListBox.Items)
+            //{
+            //    //Query EIP_MENUSYSTEM Table based on the roleFormListBox
+            //    sqll = "SELECT FORMTITLE, FORMDESC, FORMURL FROM EIP_MENUSYSTEM WHERE IDMENUSYS = '" + li.Value.ToString() + "'";
+            //    dssqll = db.SelectQuery(sqll);
+
+            //    //Insert data based on the selected role in userRoleDropDownList
+            //    if (userRoleDropDownList.SelectedItem.Text == "System Administrator")
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_SYSADMINMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else if (userRoleDropDownList.SelectedItem.Text == "Business Process Owner")
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_BPOMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else if ((userRoleDropDownList.SelectedItem.Text == "REVP") || (userRoleDropDownList.SelectedItem.Text == "VP") || (userRoleDropDownList.SelectedItem.Text == "MD") || (userRoleDropDownList.SelectedItem.Text == "Finance Signature"))
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_APPROVALSUPPORTMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else if (userRoleDropDownList.SelectedItem.Text == "GM Regional Planning")
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_GMREPLANMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else if (userRoleDropDownList.SelectedItem.Text == "IP Initiator")
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_IPINITIATORMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else if (userRoleDropDownList.SelectedItem.Text == "BOM")
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_BOMMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //    else
+            //    {
+            //        sqlInsert = "INSERT INTO EIP_FSUPPORTMENU(TITLE, DESCRIPTION, NAVIGATEURL, PARENTID) VALUES('" + dssqll.Tables[0].Rows[0]["FORMTITLE"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMDESC"].ToString() + "', '" + dssqll.Tables[0].Rows[0]["FORMURL"].ToString() + "', '1')";
+            //        db.InsertQuery(sqlInsert);
+            //    }
+            //}
+
+            //bindData();
+            //roleFormListBox.Items.Clear();
+        }
+
+        //private void LoadUserAccessLists()
+        //{
+        //    DataSet ds = new DataSet();
+        //    if (userRoleDropDownList.SelectedItem.Text == "System Administrator")
+        //    {
+        //        //Load Menu for Sys Admin
+        //        string sqlAdmin = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_SYSADMINMENU";
+        //        ds = db.SelectQuery(sqlAdmin);
+        //    }
+        //    else if (userRoleDropDownList.SelectedItem.Text == "Business Process Owner")
+        //    {
+        //        //Load Menu for BPO
+        //        string sqlBPO = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_BPOMENU";
+        //        ds = db.SelectQuery(sqlBPO);
+        //    }
+        //    else if ((userRoleDropDownList.SelectedItem.Text == "REVP") || (userRoleDropDownList.SelectedItem.Text == "VP") || (userRoleDropDownList.SelectedItem.Text == "MD") || (userRoleDropDownList.SelectedItem.Text == "Finance Signature"))
+        //    {
+        //        //Load the Menu for Approval People
+        //        string sqlApproval = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_APPROVALSUPPORTMENU";
+        //        ds = db.SelectQuery(sqlApproval);
+        //    }
+        //    else if (userRoleDropDownList.SelectedItem.Text == "GM Regional Planning")
+        //    {
+        //        //Load the Menu for GM Regional Planning
+        //        string sqlGMREPlan = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_GMREPLANMENU";
+        //        ds = db.SelectQuery(sqlGMREPlan);
+        //    }
+        //    else if (userRoleDropDownList.SelectedItem.Text == "IP Initiator")
+        //    {
+        //        //Load Menu for IP Initiator
+        //        string sqlIPInitiator = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_IPINITIATORMENU";
+        //        ds = db.SelectQuery(sqlIPInitiator);
+        //    }
+        //    else if (userRoleDropDownList.SelectedItem.Text == "BOM")
+        //    {
+        //        //Load Menu for BOM
+        //        string sqlBOM = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_BOMMENU";
+        //        ds = db.SelectQuery(sqlBOM);
+        //    }
+        //    else
+        //    {
+        //        //Load the Menu for Functional Support People
+        //        string sqlFunctionalSupport = "SELECT MENUID, TITLE, DESCRIPTION, NAVIGATEURL, PARENTID FROM EIP_FSUPPORTMENU";
+        //        ds = db.SelectQuery(sqlFunctionalSupport);
+        //    }
+
+        //    userFunctionalityGridView.DataSource = ds;
+        //    userFunctionalityGridView.DataBind();
+
+        //    foreach (GridViewRow grv in userFunctionalityGridView.Rows)
+        //    {
+        //        if (userFunctionalityGridView.Rows.Count > 0)
+        //        {
+        //            if (grv.RowIndex == 0)
+        //            {
+        //                CheckBox ckb = (CheckBox)userFunctionalityGridView.Rows[grv.RowIndex].FindControl("removeRoleCheckBox");
+        //                ckb.Visible = false;
+        //            }
+
+        //            if (grv.RowIndex != 0)
+        //            {
+        //                CheckBox ckb = (CheckBox)userFunctionalityGridView.Rows[grv.RowIndex].FindControl("removeRoleCheckBox");
+        //                ckb.Attributes.Add("onclick", "return RemoveRole()");
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void HideObjects()
+        //{
+        //    //rolesPanel.Visible = false;
+        //    removeRolePanel.Visible = false;
+
+        //}
+    }
+}

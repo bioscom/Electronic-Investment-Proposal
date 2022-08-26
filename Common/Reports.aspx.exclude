@@ -1,0 +1,140 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="True" CodeFile="Reports.aspx.cs" Inherits="Common_Reports" Title="Investment Proposal" %>
+<%@ Register assembly="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" namespace="Microsoft.Reporting.WebForms" tagprefix="rsweb" %>
+
+<%@ Register src="../UserControl/orpCalendar.ascx" tagname="orpCalendar" tagprefix="uc1" %>
+
+<asp:Content id="Content1" ContentPlaceHolderid="ContentPlaceHolder1" Runat="Server">
+    <div>
+    <table class="tMainBorder" style="width: 100%">
+        <tr class="cHeadTile">
+            <td colspan="2" style="height:20px">
+                <asp:Label id="Label2" runat="server" Text="Electronic Investment Proposal Report Generator"></asp:Label>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:25%">
+                <table style="width: 98%" class="tMainBorder">
+                    <tr>
+                        <td class="cHeadTile" colspan="2">
+                            eIP Reports</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:DropDownList id="IPReportsDropDownList" runat="server" Width="251px">
+                                <asp:ListItem Value="-1">Select Report Type</asp:ListItem>
+                                <asp:ListItem Value="1">IPs in progress</asp:ListItem>
+                                <asp:ListItem Value="2">Approved IPs</asp:ListItem>
+                                <asp:ListItem Value="3">IPs Not yet actioned</asp:ListItem>
+                            </asp:DropDownList>
+                            <asp:CompareValidator ID="CompareValidator1" runat="server" 
+                                ControlToValidate="IPReportsDropDownList" 
+                                ErrorMessage="Please select Report Type" Operator="NotEqual" Type="Integer" 
+                                ValidationGroup="xxx" ValueToCompare="-1">*</asp:CompareValidator>
+                        </td>
+                        <td>
+                            <asp:Button ID="goButton" runat="server" Text="Go" Width="30px" 
+                                onclick="goButton_Click" ValidationGroup="xxx" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <asp:LinkButton ID="advancedReportLinkButton" runat="server" 
+                                onclick="advancedReportLinkButton_Click">Advanced Reporting...</asp:LinkButton>
+                        </td>
+                    </tr>
+                </table>
+                <asp:Panel ID="AdvancedReportPanel" runat="server">
+                    <table style="width: 98%" class="tMainBorder">
+                    <tr>
+                        <td colspan="2" class="cHeadTile">
+                            Advanced Reporting Criteria</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table style="width: 99%; border:0px">
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="Label9" runat="server" Text="Approved IPs between"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="Label10" runat="server" Text="and"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <uc1:orpCalendar ID="fromCalendar" runat="server" />
+                                    </td>
+                                    <td>
+                                        <uc1:orpCalendar ID="toCalendar" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td style="width:30%">
+                                <asp:Label ID="Label7" runat="server" Text="Originating Unit:"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="OUList" runat="server" AutoPostBack="True" 
+                                    onselectedindexchanged="OUList_SelectedIndexChanged" Width="200px">
+                                    <asp:ListItem Value="-1">Select Organisational Unit</asp:ListItem>
+                                </asp:DropDownList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Label ID="Label3" runat="server" Text="Function:"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="functionDBL" runat="server" Width="200px">
+                                    <asp:ListItem Value="-1">Select Function</asp:ListItem>
+                                </asp:DropDownList>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label4" runat="server" Text="Amount SS:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:DropDownList id="IPLimitDropDownList" runat="server" 
+                                            Width="200px">
+                                <asp:ListItem Value="-1">Select IP Limit</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label5" runat="server" Text="Finance Approver:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="FinancialApproverDropDownList" runat="server" 
+                                Width="200px">
+                                <asp:ListItem Value="-1">Select Finance Approver</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label6" runat="server" Text="Organisational Approver:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="OrganisationalApproverList" runat="server" Width="200px">
+                                <asp:ListItem Value="-1">Select Organisational Approver</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                </table>
+                <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True" 
+                        ShowSummary="False" ValidationGroup="xxx" />
+                </asp:Panel>
+            </td>
+            <td style="width:70%">
+                <div style="margin-top:0.5em; margin-left:0.5em; overflow:auto">
+                    <rsweb:reportviewer ID="rptViewer" runat="server" Font-Names="Verdana" Font-Size="8pt" Width="99%"></rsweb:reportviewer>
+                </div>
+            </td>
+        </tr>
+    </table>    
+</div>
+</asp:Content>

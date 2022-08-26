@@ -1,0 +1,153 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="true" CodeFile="zzVPREVPComment.aspx.cs" Inherits="ApprovalSupportFunction_zzVPREVPComment" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <table class="tMainBorder" style="width:800px">
+        <tr>
+            <td class="cHeadTile" colspan="3">
+                Forward IP for Vice President Support / View Comments</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                    <table style="width: 99%;" class="tMainBorder">
+                        <tr>
+                            <td colspan="4" class="cHeadTile">
+                                Proposal Details</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 15%">
+                                <asp:Label id="Label2" runat="server" Text="IP Number:" Font-Bold="True"></asp:Label>
+                            </td>
+                            <td style="width: 30%">
+                                <asp:Label id="projNumberLabel" runat="server"></asp:Label>
+                            </td>
+                            <td colspan="2">
+                                <asp:Label id="Label3" runat="server" Text="Project Title:" Font-Bold="True"></asp:Label>
+                            &nbsp;
+                                <asp:Label id="projTitleLabel" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 12%">
+                                <asp:Label id="Label4" runat="server" Text="Initiator:" Font-Bold="True"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:Label id="initiatorLabel" runat="server"></asp:Label>
+                            </td>
+                            <td colspan="2">
+                                &nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Label id="Label29" runat="server" Text="Amount JV ($mln):  " 
+                                    Font-Bold="True"></asp:Label>
+                            </td>
+                            <td>
+                                    <asp:Label id="AmountJVLabel" runat="server" Font-Bold="True" 
+                                        ForeColor="#006600"></asp:Label>
+                            </td>
+                            <td style="width: 20%">
+                                <asp:Label id="Label5" runat="server" Text="Date of Last Action:" 
+                                    Font-Bold="True"></asp:Label>
+                            </td>
+                            <td>
+                            <div>
+                                <asp:Label id="dateLastActionedLabel" runat="server"></asp:Label>
+                            </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="float:right">
+                                </div>
+                                <asp:Label id="Label30" runat="server" Text="Amount SS ($mln):  " 
+                                    Font-Bold="True"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:Label id="AmountSSLabel" runat="server" Font-Bold="True" ForeColor="#006600"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:Label id="Label6" runat="server" Text="Date Initiated:" Font-Bold="True"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:Label id="dateSubmitLabel" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                        </table>
+                
+                
+                </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+            <div style="background-color:White">
+    <asp:GridView ID="VPGridView" runat="server" Width="99%" AutoGenerateColumns="False" 
+                    PageSize="20">
+        <Columns>
+            <asp:TemplateField HeaderText="...">
+                <ItemTemplate>
+                    <asp:CheckBox ID="VPUserID" runat="server" IDUSERMGT='<%# DataBinder.Eval(Container.DataItem, "IDUSERMGT") %>' 
+                        EMAILADDY = '<%# DataBinder.Eval(Container.DataItem, "USERMAIL") %>' />
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Vice President">
+                <ItemTemplate>
+                    <asp:Label ID="GMLabel" runat="server" 
+                            Text='<%# DataBinder.Eval(Container.DataItem, "FULLNAME") %>' Font-Bold="True" 
+                            ForeColor="#000066"></asp:Label>
+                </ItemTemplate>
+                <ItemStyle HorizontalAlign="Left" />
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Role & Function">
+                <ItemTemplate>
+                    <asp:Label ID="RoleLabel" runat="server" 
+                            Text='<%# DataBinder.Eval(Container.DataItem, "VICEPRESIDENT") %>'></asp:Label>
+                </ItemTemplate>
+                <ItemStyle HorizontalAlign="Left" />
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Status">
+                <ItemTemplate>
+                    <asp:Label ID="StatusLabel" runat="server" Text=''></asp:Label>
+                </ItemTemplate>
+                <ItemStyle HorizontalAlign="Left" />
+            </asp:TemplateField>
+            
+            <asp:TemplateField HeaderText="Comments">
+                <ItemTemplate>
+                    <asp:Label ID="CommentsLabel" runat="server" Text=''></asp:Label>
+                </ItemTemplate>
+                <ItemStyle HorizontalAlign="Left" Width="300px" />
+            </asp:TemplateField>
+            
+            <asp:TemplateField HeaderText="...">
+                <ItemTemplate>
+                    <asp:CheckBox ID="Reminder" runat="server" IDUSERMGT='<%# DataBinder.Eval(Container.DataItem, "IDUSERMGT") %>' 
+                        EMAILADDY = '<%# DataBinder.Eval(Container.DataItem, "USERMAIL") %>' />
+                </ItemTemplate>
+            </asp:TemplateField>
+        </Columns>
+    </asp:GridView>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+           <asp:Button id="forwardButton" runat="server" onclick="forwardButton_Click" 
+                    Text="Forward" Height="20px" />
+            </td>
+            <td style="text-align:center">
+                <asp:Button id="closeButton" runat="server" 
+                onclick="closeButton_Click" Text="Close" Height="20px" />
+            </td>
+            <td>
+                <div style="float:right; margin-right:0.1em">
+                    <asp:Button ID="sendReminderButton" runat="server" onclick="sendReminderButton_Click" Text="Send Reminder" Width="130px" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="cHeadTile" colspan="3">
+                &nbsp;</td>
+        </tr>
+    </table>
+</asp:Content>
+

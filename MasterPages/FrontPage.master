@@ -1,0 +1,58 @@
+﻿<%@ Master Language="C#" AutoEventWireup="True" CodeFile="FrontPage.master.cs" Inherits="MasterPages_FrontPage" %>
+
+<%@ Register Src="~/UserControl/footer.ascx" TagPrefix="eip" TagName="footer" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Investment Proposal</title>
+    <link href="../CSS/Styles.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="../JavaScript/eip.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="container">
+            <div id="header">
+                <div class="title">Electronic Investment Proposal </div>
+                <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/logo.gif"
+                    Style="z-index: 102; left: 0px; position: absolute; top: 1px" />
+                <div class="breadcrumb">
+                    Welcome
+                    <asp:Label ID="loggedinUserLabel" runat="server" ForeColor="Black"></asp:Label>
+                    &nbsp;| 
+                <asp:Label ID="dateLabel" runat="server" Text="" ForeColor="Black"></asp:Label>
+                    &nbsp;|
+                    <asp:HyperLink ID="logoutHyperLink" runat="server" NavigateUrl="~/Logout.aspx">Logout</asp:HyperLink>
+                    <br />
+                    Logged in as
+                    <asp:Label ID="UserRoleLabel" runat="server"></asp:Label>
+                    |
+                    <asp:LinkButton ID="lnkHomePage" runat="server" PostBackUrl="~/Default.aspx" ValidationGroup="MasterMaster">Home Page</asp:LinkButton>
+                    <br />
+                    <asp:Label ID="UserIDLabel" runat="server" Font-Bold="True" Font-Size="Smaller" ForeColor="Red"></asp:Label>
+                    &nbsp;<asp:Label ID="CompanyNameLabel" runat="server" Font-Bold="True" Font-Size="Smaller" ForeColor="Red"></asp:Label>
+                </div>
+            </div>
+            <div id="navigation1">
+            </div>
+            <div id="navigation2">
+            </div>
+
+            <div id="master_content">
+                <center>
+                    <div class="master_contentplaceholder">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </center>
+            </div>
+            <br />
+        </div>
+        <div id="footer">
+            <eip:footer runat="server" ID="footer1" />
+        </div>
+    </form>
+</body>
+</html>

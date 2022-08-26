@@ -1,0 +1,89 @@
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Data.OracleClient;
+using System.Web;
+using System.Web.UI.WebControls;
+using System.Collections.Generic;
+
+public class IPInitiator
+{
+    public IPInitiator()
+    {
+
+    }
+
+    //public bool ForwardProposalToLineTeamLead(long lProposalId, int iLineTeamLeadID)
+    //{
+    //    DbCommand comm = GenericDataAccess.CreateCommand();
+    //    comm.CommandText = StoredProcedure.ForwardProposal();
+
+    //    DbParameter param = comm.CreateParameter();
+    //    param.ParameterName = ":IDPROPOSAL";
+    //    param.Value = lProposalId;
+    //    param.DbType = DbType.Int64;
+    //    comm.Parameters.Add(param);
+
+    //    param = comm.CreateParameter();
+    //    param.ParameterName = ":IDUSERMGT";
+    //    param.Value = iLineTeamLeadID;
+    //    param.DbType = DbType.Int32;
+    //    comm.Parameters.Add(param);
+
+    //    param = comm.CreateParameter();
+    //    param.ParameterName = ":DATE_RECEIVED";
+    //    param.Value = DateTime.Today.Date.ToShortDateString();
+    //    param.DbType = DbType.Date;
+    //    comm.Parameters.Add(param);
+
+    //    int result = -1;
+    //    try
+    //    {
+    //        result = GenericDataAccess.ExecuteNonQuery(comm);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+    //    }
+
+    //    return (result != -1);
+
+    //    //if (success == false)
+    //    //{
+    //    //    //It means that the proposal already exist for a Line Team Lead, you may need to reasign the another Line Team Lead
+    //    //    string sqlUpdate = "UPDATE EIP_LINETEAMLEAD SET IDUSERMGT = '" + LineTeamLeadID + "' WHERE IDPROPOSAL ='" + ProposalID + "'";
+    //    //    DbCommand commUpdate = GenericDataAccess.CreateCommand();
+    //    //    commUpdate.CommandText = sql;
+
+    //    //    // create a new parameter
+    //    //    DbParameter paramUpdate = commUpdate.CreateParameter();
+    //    //    paramUpdate.ParameterName = ":IDPROPOSAL";
+    //    //    paramUpdate.Value = ProposalID;
+    //    //    paramUpdate.DbType = DbType.Int32;
+    //    //    commUpdate.Parameters.Add(paramUpdate);
+
+    //    //    paramUpdate = commUpdate.CreateParameter();
+    //    //    paramUpdate.ParameterName = ":IDUSERMGT";
+    //    //    paramUpdate.Value = LineTeamLeadID;
+    //    //    paramUpdate.DbType = DbType.Int32;
+    //    //    commUpdate.Parameters.Add(paramUpdate);
+
+    //    //    int resultUpdate = -1;
+    //    //    try
+    //    //    {
+    //    //        resultUpdate = GenericDataAccess.ExecuteNonQuery(commUpdate);
+    //    //    }
+    //    //    catch (Exception ex)
+    //    //    {
+    //    //        System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+    //    //    }
+    //    //}
+
+    //    //return success;
+    //}
+
+
+    
+
+    
+}

@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Web.UI.WebControls;
+
+public class EditUserController
+{
+    public bool success = false;
+    shellCompanies Companies = new shellCompanies();
+    AssignedRole UserRoles = new AssignedRole();
+   
+
+    public EditUserController()
+    {
+
+    }
+
+    public void PageLoad(DropDownList functionDropDownList, DropDownList userRoleDropDownList, DropDownList companyDropDownList, DropDownList UserOUDropDownList, RadioButton LQrdb, RadioButton SQrdb, RadioButton TQrdb, RadioButton UQrdb)
+    {
+        //Fill in the User's Directorates(Function)
+        db.FillDBL(functionDropDownList, db.sqlFunction);
+
+        //Fill the User Roles
+        db.FillDBL(userRoleDropDownList, db.UserRolesSQL);
+
+        //Fill the Shell Companies
+        db.FillDBL(companyDropDownList, db.ShellCompaniesSQL);
+
+        companyDropDownList.Enabled = false;
+        UserOUDropDownList.Enabled = false;
+
+        //Approval Limits
+
+        LQrdb.Text = "$" + IPLimit.m_iLOWERQUARTILE + " mln";
+        SQrdb.Text = "$" + IPLimit.m_iSECONDQUARTILE + " mln";
+        TQrdb.Text = "$" + IPLimit.m_iTHIRDQUARTILE + " mln";
+        UQrdb.Text = "$" + IPLimit.m_iUPPERQUARTILE + " mln";
+    }
+}

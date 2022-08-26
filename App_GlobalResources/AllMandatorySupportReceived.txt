@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title></title>
+</head>
+<body>
+<br /><br />
+	Dear Sir/Ma, <br/><br/>
+	All Mandatory functional support for @@SUBJECT investment proposal have been received. <br />
+	You can now forward the IP to Finance Signature/or OU Finance Director.
+	However, the Non Mandatory functional support defaulting the Service Level Agreement(SLA) will be notified. <br />
+	They will no longer have access to the proposal when approved by the Finance Signature/OU Finance Director.</br>
+	<br /><br />
+	<a href=@@URL>Click here</a> to access the system.<br />
+	
+	<div>
+		In case of any difficulty please contact @SSSADMIN<br/>
+		on ext. @@EXT or @@EMAIL
+	</div>
+</body>
+</html>

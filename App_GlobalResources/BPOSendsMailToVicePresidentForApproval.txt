@@ -1,0 +1,19 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title></title>
+	</head>
+	<body>
+	<br /><br />
+	Dear Sir/Ma, <br /><br />
+	You have @@SUBJECT investment proposal waiting for your approval.<br />
+    <br/>To process, <br/>
+    <br />1. Click <a href=@@URL>here</a> for a step by step user guide.
+    <br />2. Please click <a href=@@URL>here</a> to access the system. <br /><br />
+    <div>
+        In case of any difficulty please contact @SSSADMIN<br/>
+        on ext. @@EXT or @@EMAIL
+    </div>
+	
+	</body>
+</html>

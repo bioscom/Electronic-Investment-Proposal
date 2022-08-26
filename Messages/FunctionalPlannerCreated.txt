@@ -1,0 +1,12 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>e-IP System Definition</title>
+	</head>
+	<body>
+	    <br/><br/>
+	    Dear Sir/Ma,<br/><br/>
+        You have just been defined on Corporate Planning's electronic IP (e-IP) System, as a Functional Planner. <br/>
+        You will receive mail from time to time when an IP is created in your function, FYI/A. <br/>
+	</body>
+</html>

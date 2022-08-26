@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Investment Proposal</title>
+</head>
+<body>
+    <br /><br />
+		Dear Sir/Ma, <br/><br/>
+        You have been nominated to take over the following Investment Proposal(s) from @@IPINITIATOR.<br /><br />
+		@@PROPOSALS
+        Please click <a href=@@URL>here</a> to access the system.<br />
+        Then click on Help -> User Guides for user guides.<br /><br />
+        
+        In case of any difficulty please contact @SSSADMIN <br/>
+        on ext. @@EXT or @@EMAIL
+</body>
+</html>

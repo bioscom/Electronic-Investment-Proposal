@@ -1,0 +1,295 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Data;
+
+/// <summary>
+/// Summary description for VPFinance
+/// </summary>
+public class VPFinance
+{
+    private static string m_sUserID;
+    private static string m_sUserMail;
+    private static string m_sRoleID;
+
+    static VPFinance()
+    {
+        string sql = "SELECT EIP_USERMGT.IDUSERMGT, EIP_USERMGT.USERROLESID, CPDMS_FUNCTIONS.FUNCTIONID, CPDMS_FUNCTIONS.FUNCTION, EIP_USERMGT.USERNAME, ";
+        sql += "EIP_USERMGT.FULLNAME, EIP_USERMGT.USERMAIL, EIP_USERMGT.USERROLESID, EIP_USERMGT.STATUS FROM EIP_USERMGT, CPDMS_FUNCTIONS ";
+        sql += "WHERE EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID AND (EIP_USERMGT.USERROLESID = '" + eipUserRoles.iVP + "') ";
+        sql += "AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "') AND (STATUS = '" + IPStatus.Activated + "')";
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+        if (dt.Rows.Count > 0)
+        {
+            m_sUserID = dt.Rows[0]["IDUSERMGT"].ToString();
+            m_sUserMail = dt.Rows[0]["USERMAIL"].ToString();
+            m_sRoleID = dt.Rows[0]["USERROLESID"].ToString();
+        }
+    }
+
+    public static string sUserID
+    {
+        get
+        {
+            return m_sUserID;
+        }
+    }
+
+    public static string sUserMail
+    {
+        get
+        {
+            return m_sUserMail;
+        }
+    }
+
+    public static string sRoleID
+    {
+        get
+        {
+            return m_sRoleID;
+        }
+    }
+}
+
+
+public class VPFinanceComments
+{
+    private string m_sIDPROPOSAL;
+    private string m_sCOMMENTS;
+    private string m_sDATECOMMENT;
+    private string m_sDATERECEIVED;
+    private int m_iSTAND;
+    private int m_iIDUSERMGT;
+
+    public VPFinanceComments()
+    {
+
+    }
+
+    public VPFinanceComments(string ProposalID, int UserID)
+    {
+        string sql = "SELECT IDPROPOSAL, IDUSERMGT, COMMENTS, TO_CHAR(DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT, STAND, TO_CHAR(DATE_RECEIVED, 'DD-MON-YYYY')DATE_RECEIVED FROM EIP_VPFINANCE WHERE (IDPROPOSAL = @IDPROPOSAL) AND (IDUSERMGT = @IDUSERMGT)";
+        sql = sql.Replace("@IDPROPOSAL", ProposalID);
+        sql = sql.Replace("@IDUSERMGT", UserID.ToString());
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql); 
+        if (dt.Rows.Count > 0)
+        {
+            m_sIDPROPOSAL = dt.Rows[0]["IDPROPOSAL"].ToString();
+            m_sCOMMENTS = dt.Rows[0]["COMMENTS"].ToString();
+            m_sDATECOMMENT = dt.Rows[0]["DATE_COMMENT"].ToString();
+            m_sDATERECEIVED = dt.Rows[0]["DATE_RECEIVED"].ToString();
+            m_iSTAND = Convert.ToInt32(dt.Rows[0]["STAND"]);
+            m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+        }
+    }
+
+    public VPFinanceComments(string ProposalID)
+    {
+        string sql = "SELECT IDPROPOSAL, IDUSERMGT, COMMENTS, TO_CHAR(DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT, STAND, TO_CHAR(DATE_RECEIVED, 'DD-MON-YYYY')DATE_RECEIVED FROM EIP_VPFINANCE WHERE (IDPROPOSAL = @IDPROPOSAL)";
+        sql = sql.Replace("@IDPROPOSAL", ProposalID);
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql); 
+        if (dt.Rows.Count > 0)
+        {
+            m_sIDPROPOSAL = dt.Rows[0]["IDPROPOSAL"].ToString();
+            m_sCOMMENTS = dt.Rows[0]["COMMENTS"].ToString();
+            m_sDATECOMMENT = dt.Rows[0]["DATE_COMMENT"].ToString();
+            m_sDATERECEIVED = dt.Rows[0]["DATE_RECEIVED"].ToString();
+            m_iSTAND = Convert.ToInt32(dt.Rows[0]["STAND"]);
+            m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+        }
+    }
+
+    public string sIDPROPOSAL
+    {
+        get
+        {
+            return m_sIDPROPOSAL;
+        }
+    }
+
+    public string sCOMMENTS
+    {
+        get
+        {
+            return m_sCOMMENTS;
+        }
+    }
+
+    public string sDATECOMMENT
+    {
+        get
+        {
+            return m_sDATECOMMENT;
+        }
+    }
+
+    public string sDATERECEIVED
+    {
+        get
+        {
+            return m_sDATERECEIVED;
+        }
+    }
+
+    public int iSTAND
+    {
+        get
+        {
+            return m_iSTAND;
+        }
+    }
+
+    public int iIDUSERMGT
+    {
+        get
+        {
+            return m_iIDUSERMGT;
+        }
+    }
+
+    public bool VPFinanceStand()
+    {
+        bool Supported = false;
+        if (iSTAND == SupportState.iFinanceApproval)
+        {
+            Supported = true;
+        }
+        return Supported;
+    }
+
+    private static bool AddComment(appUsers CurrentUser, Proposal proposal, string comment, int stand, string dateRev)
+    {
+        bool success = false;
+        string sql = "UPDATE EIP_VPFINANCE SET STAND = :STAND, COMMENTS = :COMMENTS, DATE_COMMENT = TO_DATE('" + dateRev + "', 'mm/dd/yyyy') ";
+        sql += "WHERE (IDPROPOSAL = :IDPROPOSAL) AND (IDUSERMGT = :IDUSERMGT)";
+        sql = sql.Replace(":STAND", "'" + stand.ToString() + "'");
+        sql = sql.Replace(":COMMENTS", "'" + comment.Replace("'", "''") + "'");
+        sql = sql.Replace(":IDPROPOSAL", "'" + proposal.IDPROPOSAL + "'");
+        sql = sql.Replace(":IDUSERMGT", "'" + CurrentUser.iIDUSERMGT + "'");
+
+        success = DataAccess.ExecuteNonQueryCommand(sql);
+
+        db.AuditTrail(CurrentUser, stand, comment, dateRev, proposal.IDPROPOSAL);
+        proposal.ProposalActionTrail(proposal.IDPROPOSAL, CurrentUser);
+
+        return success;
+    }
+
+    public bool VPFinanceReceivedIP()
+    {
+        bool IPFound = false;
+        if (sIDPROPOSAL != null)
+        {
+            IPFound = true;
+        }
+        return IPFound;
+    }
+
+    public DataTable MyPendingProposal(string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, ";
+        sql += "EIP_USERMGT.FULLNAME AS PROJ_INIT, TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT FROM EIP_PROPOSAL ";
+        sql += "INNER JOIN EIP_VPFINANCE ON EIP_PROPOSAL.IDPROPOSAL = EIP_VPFINANCE.IDPROPOSAL ";
+        sql += "INNER JOIN EIP_USERMGT ON EIP_PROPOSAL.IDUSERMGT = EIP_USERMGT.IDUSERMGT ";
+        sql += "WHERE (EIP_VPFINANCE.IDUSERMGT = '" + UserID + "') AND (EIP_PROPOSAL.STATUS = '" + IPStatus.Activated + "') ";
+        sql += "AND (EIP_PROPOSAL.DISCONTINUE <> '" + IPStatus.Discontinued + "') ";
+        sql += "AND ((EIP_VPFINANCE.STAND = '" + SupportState.iNotSupported + "') OR (EIP_VPFINANCE.STAND = '" + SupportState.iStandDefault + "'))";
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+
+        //Seek pending proposals when acting as a Vice president
+        VPComments VP = new VPComments();
+        dt.Merge(VP.MyPendingProposal(UserID));
+        
+        return dt;
+    }
+
+    public DataTable MyProposalHistory(string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, ";
+        sql += "EIP_USERMGT.FULLNAME AS PROJ_INIT, TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_PROPOSAL.DOC_STAND, TO_CHAR(EIP_VPFINANCE.DATE_COMMENT, 'DD-MON-YYYY')DATE_COMMENT ";
+        sql += "FROM EIP_PROPOSAL, EIP_USERMGT, EIP_VPFINANCE WHERE  (EIP_USERMGT.IDUSERMGT = EIP_PROPOSAL.IDUSERMGT) ";
+        sql += "AND (EIP_PROPOSAL.IDPROPOSAL = EIP_VPFINANCE.IDPROPOSAL) AND (EIP_VPFINANCE.IDUSERMGT = '" + UserID + "') ";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public DataTable GetMyComment(string ProposalID, string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY') AS DATE_INIT, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY') AS DATE_SUBMIT, EIP_PROPOSAL.JV, EIP_PROPOSAL.SS, EIP_USERMGT.FULLNAME AS PROJ_INIT, ";
+        sql += "EIP_AUDITTRAIL.STAND, EIP_AUDITTRAIL.CCOMMENT AS COMMENTS, TO_CHAR(EIP_AUDITTRAIL.DDATE, 'DD-MON-YYYY') AS DATE_COMMENT ";
+        sql += "FROM EIP_PROPOSAL INNER JOIN ";
+        sql += "EIP_USERMGT ON EIP_PROPOSAL.IDUSERMGT = EIP_USERMGT.IDUSERMGT INNER JOIN ";
+        sql += "EIP_AUDITTRAIL ON EIP_PROPOSAL.IDPROPOSAL = EIP_AUDITTRAIL.IDPROPOSAL INNER JOIN ";
+        sql += "EIP_USERMGT EIP_USERMGT_1 ON EIP_AUDITTRAIL.IDUSERMGT = EIP_USERMGT_1.IDUSERMGT INNER JOIN ";
+        sql += "EIP_VPFINANCE ON EIP_USERMGT_1.IDUSERMGT = EIP_VPFINANCE.IDUSERMGT ";
+        sql += "AND EIP_USERMGT_1.IDUSERMGT = '" + UserID + "' AND EIP_PROPOSAL.IDPROPOSAL = '" + ProposalID + "'";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public DataTable ServiceLevelAgreement()
+    {
+        string sql = "SELECT EIP_VPFINANCE.IDPROPOSAL, EIP_VPFINANCE.IDUSERMGT, EIP_VPFINANCE.STAND, EIP_VPFINANCE.DATE_RECEIVED ";
+        sql += "FROM EIP_VPFINANCE INNER JOIN EIP_PROPOSAL ON EIP_VPFINANCE.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL ";
+        sql += "WHERE (EIP_VPFINANCE.STAND = '" + SupportState.iSupportApproverStandDefault + "') AND (EIP_PROPOSAL.STATUS = '" + IPStatus.Activated + "')";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public static bool VPFinanceAddCommentProcedure(appUsers CurrentUser, Proposal proposal, string comment, int stand, string dateRev)
+    {
+        bool success = false;
+        string[] BPOEmail = { "" };
+        string[] IPInitiatorMail = { "" };
+        IPInitiator IPInit = new IPInitiator(proposal.IDUSERMGT);
+        BusinessProcessOwner BPO = new BusinessProcessOwner(IPInit.iCompanyID);
+        IPInitiatorMail[0] = IPInit.sUserMail;
+        EPGIPTrackerComment IPTracker = new EPGIPTrackerComment();
+
+        VPComments VP = new VPComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+        VPFinanceComments VPFin = new VPFinanceComments(proposal.IDPROPOSAL);
+
+        if (VPFin.VPFinanceReceivedIP() == true)
+        {
+            success = AddComment(CurrentUser, proposal, comment, stand, dateRev);
+            if (success == true)
+            {
+                if (stand == SupportState.iFinanceApproval)
+                {
+                    proposal.ProposalSupportedApproved(proposal, CurrentUser, BPO.sUserMail, IPInitiatorMail[0]);
+                    success = true;
+                }
+                else if (stand == SupportState.iNotApproved)
+                {
+                    proposal.ProposalNotSupported(proposal, CurrentUser, proposal.PROJ_TITLE, comment);
+                    success = true;
+                }
+            }
+        }
+        else if (VP.VPReceivedIP() == true)  //Note: here, if IP is found for VP Finance, it is either in EIP_VPFINANCE or EIP_VPS table. So if VPFinance.AddComment returns false, then check out VP.AddComment
+        {
+            //success = VP.AddComment(CurrentUser, proposal, comment, stand, dateRev);
+            success = VPComments.VPAddCommentProcedure(CurrentUser, proposal, comment, stand, dateRev);
+            if (stand == SupportState.iApproved)
+            {
+                proposal.ProposalSupportedApproved(proposal, CurrentUser, BPO.sUserMail, IPInitiatorMail[0]);
+                success = true;
+            }
+            else if (stand == SupportState.iNotApproved)
+            {
+                proposal.ProposalNotSupported(proposal, CurrentUser, proposal.PROJ_TITLE, comment);
+                success = true;
+            }
+        }
+
+        IPTracker.MailEPGIPTracker(proposal, CurrentUser.sUSERMAIL);
+        return success;
+    }
+}

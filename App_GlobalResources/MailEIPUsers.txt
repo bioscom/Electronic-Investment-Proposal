@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>e-IP Role Definition</title>
+</head>
+<body>
+        <br/><br/>
+        Dear Sir/Ma,<br/><br/>
+        You have just been defined on Corporate Planning's electronic IP (e-IP) System, in the role of @@USERROLE, to support/approve IPs. <br/>
+        However, before IPs can be forwarded to your inbox, you would need to formally accept this role <br/>
+        by agreeing to abide by the IP behavioural guidelines.<br/><br/>
+        To do this, please click <a href=@@URL?UserName=@@USERNAME> here </a><br/><br/>
+        Please note that your decision to accept or not to accept may be communicated  <br/>
+        to the BPO and GM Regional Planning (where deemed necessary) who maintains the list of IP signatories.<br/><br/>
+        <div>
+            In case of any difficulty please contact @SSSADMIN <br/>
+            on ext. @@EXT or @@EMAIL
+        </div>
+</body>
+</html>

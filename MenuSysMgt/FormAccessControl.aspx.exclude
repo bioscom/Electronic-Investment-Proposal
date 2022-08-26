@@ -1,0 +1,133 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="True" CodeFile="FormAccessControl.aspx.cs" Inherits="IP.MenuSysMgt.FormAccessControl" Title="Investment Proposal" MaintainScrollPositionOnPostback="true" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <table style="width: 99%">
+        <tr>
+            <td class="cHeadTile" colspan="2">
+                &nbsp;User Access Control&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 50%; vertical-align:middle">
+                <div style="float:right">
+                    <asp:Label ID="Label1" runat="server" 
+                        Text="Select User Role to Add or Remove Functionalities" Font-Bold="True"></asp:Label>
+                </div>
+            </td>
+            <td vertical-align:middle">
+                  &nbsp;&nbsp;&nbsp;
+                  <asp:DropDownList ID="userRoleDropDownList" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="userRoleDropDownList_SelectedIndexChanged">
+                    <asp:ListItem Value="-1">--Select User Role--</asp:ListItem>
+                </asp:DropDownList>
+                      </td>
+        </tr>
+        <tr>
+            <td style="width: 50%; vertical-align:middle">
+                &nbsp;</td>
+            <td style="vertical-align:middle">
+                  &nbsp;</td>
+        </tr>
+    </table>
+    <table style="width: 99%">
+        <tr>
+            <td style="width: 50%">
+
+        <asp:GridView id="formsGridView" runat="server" AutoGenerateColumns="False" 
+                      AllowPaging="True" PageSize="15"  width="99%"
+            onpageindexchanging="formsGridView_PageIndexChanging">
+            <Columns>
+            
+                <asp:TemplateField>
+                    <ItemTemplate>
+                       <%# Container.DataItemIndex + 1 %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+                <asp:TemplateField HeaderText="...">
+                    <ItemTemplate>
+                        <asp:CheckBox ID="MenuIDCheckBox" runat="server" 
+                            MENUID='<%# DataBinder.Eval(Container.DataItem, "IDMENUSYS") %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+                <asp:TemplateField HeaderText="Form Title">
+                    <ItemTemplate>
+                        <asp:Label id="labelformTitle" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMTITLE") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+                <asp:TemplateField HeaderText="Form Navigate URL">
+                    <ItemTemplate>
+                        <asp:Label id="labelformURL" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMURL") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField HeaderText="Form Description">
+                    <ItemTemplate>
+                        <asp:Label id="labelformDesc" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "FORMDESC") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                
+            </Columns>
+        </asp:GridView>
+        <br />
+        <asp:Button ID="addFuncButton" runat="server" onclick="addFuncButton_Click" 
+            Text="Add Selected Functionality" Width="220px" Height="25px" />
+            
+            </td>
+            <td>
+
+                <asp:GridView ID="removeRoleGridView" runat="server" AllowPaging="True" 
+                    AutoGenerateColumns="False" 
+                    onpageindexchanging="formsGridView_PageIndexChanging" PageSize="15" 
+                    width="99%">
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <%# Container.DataItemIndex + 1 %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="...">
+                            <ItemTemplate>
+                                <asp:CheckBox ID="removeRoleCheckBox" runat="server" 
+                                    MENUID='<%# DataBinder.Eval(Container.DataItem, "MENUID") %>' />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Form Title">
+                            <ItemTemplate>
+                                <asp:Label ID="labelRemoveRoleTitle" runat="server" 
+                                    Text='<%# DataBinder.Eval(Container.DataItem, "TITLE") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Form Navigate URL">
+                            <ItemTemplate>
+                                <asp:Label ID="labelRemoveRoleURL" runat="server" 
+                                    Text='<%# DataBinder.Eval(Container.DataItem, "NAVIGATEURL") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Form Description">
+                            <ItemTemplate>
+                                <asp:Label ID="labelRemoveRoleDesc" runat="server" 
+                                    Text='<%# DataBinder.Eval(Container.DataItem, "DESCRIPTION") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+                <br />
+
+            
+            <asp:Button ID="removeFunctionButton" runat="server" 
+            onclick="removeFunctionButton_Click" Text="Remove Selected Functionality" 
+            Width="220px" Height="25px" />
+            
+            <br />
+            <br />
+   
+            
+            </td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    </asp:Content>
+

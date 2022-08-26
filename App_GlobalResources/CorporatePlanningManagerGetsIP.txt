@@ -1,0 +1,17 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Investment Proposal</title>
+	</head>
+	<body>
+        <br />
+        Dear Sir/Ma,<br /><br />
+            An investment proposal for @@SUBJECT has now received all mandatory functional support, @@SUPPORTFUNCTION and <br />
+            GM supports and is now ready for your review.<br /><br />
+            Please click <a href=@@URL?Proposalid=@@PROPOSALID>here</a> to access the system.<br /><br />
+            <div>
+                In case of any difficulty please contact @SSSADMIN <br/>
+                on ext. @@EXT or @@EMAIL
+            </div>
+	</body>
+</html>

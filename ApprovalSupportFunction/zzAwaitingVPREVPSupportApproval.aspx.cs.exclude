@@ -1,0 +1,118 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+
+public partial class ApprovalSupportFunction_zzAwaitingVPREVPSupportApproval : System.Web.UI.Page
+{
+   
+    appUsers CurrentUser = new appUsers();
+    SendMail MyMail = new SendMail();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        LoadProposals();
+    }
+
+
+    private void LoadProposals()
+    {
+        //For Support Functions
+        CurrentUser = new appUsers(Apps.LoginIDNoDomain(User.Identity.Name));
+
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_USERMGT.FULLNAME AS PROJ_INIT, EIP_PROPOSAL.JV, EIP_PROPOSAL.SS, ";
+        sql += "EIP_GMREPLAN.COMMENTS, EIP_GMREPLAN.DATE_COMMENT, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, EIP_USERMGT.USERMAIL, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT ";
+        sql += "FROM EIP_IPINITIATOR INNER JOIN ";
+        sql += "EIP_USERMGT ON EIP_IPINITIATOR.IDUSERMGT = EIP_USERMGT.IDUSERMGT INNER JOIN EIP_GMREPLAN INNER JOIN ";
+        sql += "EIP_PROPOSAL ON EIP_GMREPLAN.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL ON EIP_IPINITIATOR.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL ";
+        sql += "WHERE (EIP_GMREPLAN.IDUSERMGT = '" + CurrentUser.iIDUSERMGT + "') AND (EIP_PROPOSAL.DOC_STAND = '" + SupportState.iNotApproved + "')";
+
+
+
+        //string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, ";
+        //sql += " TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, ";
+        //sql += "EIP_PROPOSAL.DOC_STAND, EIP_SUPPORTAPPROVERCOMMENTS.STAND, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS, EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT ";
+        //sql += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS WHERE (EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL) ";
+        //sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = '" + CurrentUser.iIDUSERMGT + "') ";
+        //sql += "AND (EIP_PROPOSAL.DOC_STAND = '" + SupportState.iNotApproved + "')";
+
+        //else if (CurrentUser.sUSERROLESID == eipUserRoles.GMRegionalPlanning)
+        //{
+        //    //For GM RegionalmPlanning
+        //    string sqlGMREPlan = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, ";
+        //    sqlGMREPlan += " TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, ";
+        //    sqlGMREPlan += "EIP_PROPOSAL.DOC_STAND, EIP_SUPPORTAPPROVERCOMMENTS.STAND, EIP_SUPPORTAPPROVERCOMMENTS.COMMENTS, EIP_SUPPORTAPPROVERCOMMENTS.DATE_COMMENT ";
+        //    sqlGMREPlan += "FROM EIP_PROPOSAL, EIP_SUPPORTAPPROVERCOMMENTS WHERE (EIP_PROPOSAL.IDPROPOSAL = EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL) ";
+        //    sqlGMREPlan += "AND (EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = '" + CurrentUser.sIDUSERMGT + "') ";
+        //    sqlGMREPlan += "AND ((EIP_SUPPORTAPPROVERCOMMENTS.STAND = '" + SupportState.iNotSupported + "') ";
+        //    sqlGMREPlan += "OR (EIP_SUPPORTAPPROVERCOMMENTS.STAND = '" + SupportState.iSupportApproverStandDefault + "') OR (EIP_SUPPORTAPPROVERCOMMENTS.STAND = '" + SupportState.iSupported + "')) ";
+        //    sqlGMREPlan += "AND (EIP_PROPOSAL.DOC_STAND = '" + SupportState.iNotApproved + "')";
+
+        //    ds = db.SelectQuery(sqlGMREPlan);
+        //}
+
+
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+
+        pendingProposalGridView.DataSource = dt;
+        pendingProposalGridView.DataBind();
+
+        if (dt.Rows.Count == 0)
+        {
+            MessageBox.Show("No Proposal Awaiting RE(VP) Found!!!");
+        }
+    }
+
+    protected void pendingProposalGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        pendingProposalGridView.PageIndex = e.NewPageIndex;
+
+        LoadProposals();
+    }
+
+    protected void pendingProposalGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        string ProposalID = "";
+        string ButtonClicked = e.CommandName; //Determines which button was clicked (stores the name of each button)
+        int index = Convert.ToInt32(e.CommandArgument); //Command Argument stores the index of each row
+
+        //5. View Proposal
+
+        if (ButtonClicked == "ViewOriginalProposal")
+        {
+            LinkButton lbOriginalProposal = (LinkButton)pendingProposalGridView.Rows[index].FindControl("ViewOriginalProposalLinkButton");
+            ProposalID = lbOriginalProposal.Attributes["PROPOSALID"].ToString();
+            Response.Redirect("~/ViewProposal.aspx" + "?Proposalid=" + ProposalID, false);
+        }
+
+        //7. Check Comment
+
+        if (ButtonClicked == "CheckComment")
+        {
+            LinkButton lbCheckComment = (LinkButton)pendingProposalGridView.Rows[index].FindControl("CheckCommentLinkButton");
+            ProposalID = lbCheckComment.Attributes["PROPOSALID"].ToString();
+            Response.Redirect("~/ApprovalSupportFunction/zzVPREVPComment.aspx" + "?Proposalid=" + ProposalID, false);
+        }
+
+
+        //9. Forward Proposal to My Email
+
+        if (ButtonClicked == "forwardProposal")
+        {
+            LinkButton lbForwardProposal = (LinkButton)pendingProposalGridView.Rows[index].FindControl("forwardProposalLinkButton");
+            ProposalID = lbForwardProposal.Attributes["PROPOSALID"].ToString();
+
+            Label lbDateInit = (Label)pendingProposalGridView.Rows[index].FindControl("labelDateInit");
+            Label lbDateForwarded = (Label)pendingProposalGridView.Rows[index].FindControl("labelDateForwarded");
+            Label lbProjectNumber = (Label)pendingProposalGridView.Rows[index].FindControl("labelProjectNumber");
+            Label lbProjectTitle = (Label)pendingProposalGridView.Rows[index].FindControl("labelProjectTitle");
+            Label lbInitiator = (Label)pendingProposalGridView.Rows[index].FindControl("labelInitiator");
+
+            MyMail.ForwardIP(ProposalID, lbDateInit.Text, lbDateForwarded.Text, lbProjectNumber.Text, lbProjectTitle.Text, lbInitiator.Text, CurrentUser.sUSERMAIL);
+        }
+    }
+}

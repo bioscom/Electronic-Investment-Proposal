@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class MenuSysMgt_RoleSubMenu : System.Web.UI.Page
+{
+    string SortExpression = "";
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            LoadSubMenu();
+        }
+    }
+    protected void addButton_Click(object sender, EventArgs e)
+    {
+        bool success = eIPMenus.InsertSubMenu(titleTextBox.Text, descTextBox.Text, navigateURLTextBox.Text, Convert.ToInt32(ddlParentMenu.SelectedValue));
+        if (success == true)
+        {
+            LoadSubMenu();
+            MessageBox.Show("successful");
+        }
+    }
+
+    private void LoadSubMenu()
+    {
+        eIPMenus.LoadSubMenu(grdView, SortExpression, Convert.ToInt32(ddlParentMenu.SelectedValue));
+    }
+    protected void ddlParentMenu_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        LoadSubMenu();
+    }
+    protected void grdView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+
+    }
+    protected void grdView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+
+    }
+    protected void grdView_Sorted(object sender, EventArgs e)
+    {
+
+    }
+    protected void grdView_Sorting(object sender, GridViewSortEventArgs e)
+    {
+
+    }
+}

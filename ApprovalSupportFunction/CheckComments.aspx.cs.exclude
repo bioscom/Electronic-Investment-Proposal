@@ -1,0 +1,256 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+
+
+public partial class ApprovalSupportFunction_CheckComments : CustomBasePage
+{
+   
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //if (db.sessionStateStatusExpired() == true)
+        //{
+        //    Response.Redirect("~/SessionExpires.aspx");
+        //}
+
+        if (Request.QueryString["ProposalID"] != "")
+        {
+            string proposalID = Request.QueryString["ProposalID"];
+
+            new DataSet();
+            DataTable dt = db.SelectALL(proposalID);
+
+            Proposal MyProposal = new Proposal(proposalID);
+
+            if (dt.Rows.Count > 0)
+            {
+                //Project Information
+                projNumberLabel.Text = MyProposal.m_PROJ_NUM;
+                projTitleLabel.Text = MyProposal.m_PROJ_TITLE;
+                initiatorLabel.Text = dt.Rows[0]["PROJ_INIT"].ToString();
+                dateInitLabel.Text = dt.Rows[0]["DATE_INIT"].ToString();
+                dateSubmitLabel.Text = dt.Rows[0]["DATE_SUBMIT"].ToString();
+                AmountJVLabel.Text = dt.Rows[0]["JV"].ToString();
+                AmountSSLabel.Text = dt.Rows[0]["SS"].ToString();
+
+                //BFM (Controller)
+                controllerStandLabel.Text = dt.Rows[0]["CONTROLLER_STAND"].ToString();
+                controllerCommentLabel.Text = dt.Rows[0]["CONTROLLER_COMMENT"].ToString();
+                controllerDateReviewedLabel.Text = dt.Rows[0]["CONTROLLER_DATE"].ToString();
+                if (dt.Rows[0]["CONTROLLER_STAND"].ToString() == "Supported")
+                {
+                    controllerStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    controllerStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Corporate Planner
+                planStandLabel.Text = dt.Rows[0]["CPLAN_STAND"].ToString();
+                planCommentLabel.Text = dt.Rows[0]["CPLAN_COMMENT"].ToString();
+                planDateReviewedLabel.Text = dt.Rows[0]["CPLAN_DATE"].ToString();
+                if (dt.Rows[0]["CPLAN_STAND"].ToString() == "Supported")
+                {
+                    planStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    planStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Econs
+                econsStandLabel.Text = dt.Rows[0]["ECO_STAND"].ToString();
+                econsCommentLabel.Text = dt.Rows[0]["ECO_COMMENT"].ToString();
+                econsDateReviewedLabel.Text = dt.Rows[0]["ECO_DATE"].ToString();
+                if (dt.Rows[0]["ECO_STAND"].ToString() == "Supported")
+                {
+                    econsStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    econsStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //HSE
+                hseStandLabel.Text = dt.Rows[0]["HSE_STAND"].ToString();
+                hseCommentLabel.Text = dt.Rows[0]["HSE_COMMENT"].ToString();
+                hseDateReviewedLabel.Text = dt.Rows[0]["HSE_DATE"].ToString();
+                if (dt.Rows[0]["HSE_STAND"].ToString() == "Supported")
+                {
+                    hseStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    hseStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Legal
+                legalStandLabel.Text = dt.Rows[0]["LEGAL_STAND"].ToString();
+                legalCommentLabel.Text = dt.Rows[0]["LEGAL_COMMENT"].ToString();
+                legalDateReviewedLabel.Text = dt.Rows[0]["LEGAL_DATE"].ToString();
+                if (dt.Rows[0]["LEGAL_STAND"].ToString() == "Supported")
+                {
+                    legalStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    legalStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //security
+                securityStandLabel.Text = dt.Rows[0]["SECURITY_STAND"].ToString();
+                securityCommentLabel.Text = dt.Rows[0]["SECURITY_COMMENT"].ToString();
+                securityDateReviewedLabel.Text = dt.Rows[0]["SECURITY_DATE"].ToString();
+                if (dt.Rows[0]["SECURITY_STAND"].ToString() == "Supported")
+                {
+                    securityStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    securityStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //SPCA
+                scdStandLabel.Text = dt.Rows[0]["SCD_STAND"].ToString();
+                scdCommentLabel.Text = dt.Rows[0]["SCD_COMMENT"].ToString();
+                scdDateReviewedLabel.Text = dt.Rows[0]["SCD_DATE"].ToString();
+                if (dt.Rows[0]["SCD_STAND"].ToString() == "Supported")
+                {
+                    scdStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    scdStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Tax
+                taxStandLabel.Text = dt.Rows[0]["TAX_STAND"].ToString();
+                taxCommentLabel.Text = dt.Rows[0]["TAX_COMMENT"].ToString();
+                taxDateReviewedLabel.Text = dt.Rows[0]["TAX_DATE"].ToString();
+                if (dt.Rows[0]["TAX_STAND"].ToString() == "Supported")
+                {
+                    taxStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    taxStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Treasury
+                treasuryCommentLabel.Text = dt.Rows[0]["TRESSURY_COMMENT"].ToString();
+                treasuryDateReviewedLabel.Text = dt.Rows[0]["TRESSURY_DATE"].ToString();
+                treasuryStandLabel.Text = dt.Rows[0]["TRESSURY_STAND"].ToString();
+                if (dt.Rows[0]["TRESSURY_STAND"].ToString() == "Supported")
+                {
+                    treasuryStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    treasuryStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Line Team Lead
+
+                managerStandLabel.Text = dt.Rows[0]["LINE_STAND"].ToString();
+                managerCommentLabel.Text = dt.Rows[0]["LINE_COMMENT"].ToString();
+                managerDateReviewedLabel.Text = dt.Rows[0]["LINE_DATE"].ToString();
+
+                if (dt.Rows[0]["LINE_STAND"].ToString() == "Supported")
+                {
+                    managerStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    managerStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Finance Signature
+                financeStandLabel.Text = dt.Rows[0]["FIN_STAND"].ToString();
+                financeCommentLabel.Text = dt.Rows[0]["FIN_COMMENT"].ToString();
+                financeDateReviewedLabel.Text = dt.Rows[0]["FIN_DATE"].ToString();
+                if (dt.Rows[0]["FIN_STAND"].ToString() == "Approved")
+                {
+                    financeStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    financeStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Managing Director
+
+                directorStandLabel.Text = dt.Rows[0]["MD_STAND"].ToString();
+                directorCommentLabel.Text = dt.Rows[0]["MD_COMMENT"].ToString();
+                directorDateReviewedLabel.Text = dt.Rows[0]["MD_DATE"].ToString();
+
+                if (dt.Rows[0]["MD_STAND"].ToString() == "Supported")
+                {
+                    directorStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    directorStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //GM Regional Planning
+
+                GMREPlanStandLabel.Text = dt.Rows[0]["GMREPLAN_STAND"].ToString();
+                GMREPlanCommentLabel.Text = dt.Rows[0]["GMREPLAN_COMMENT"].ToString();
+                GMREPlanDateReviewedLabel.Text = dt.Rows[0]["GMREPLAN_DATE"].ToString();
+
+                if (dt.Rows[0]["GMREPLAN_STAND"].ToString() == "Supported")
+                {
+                    GMREPlanStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    GMREPlanStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+
+                //Vice President (Approval)
+
+                approvalStandLabel.Text = dt.Rows[0]["DIR_STAND"].ToString();
+                approvalCommentLabel.Text = dt.Rows[0]["DIR_COMMENT"].ToString();
+                approvalDateReviewedLabel.Text = dt.Rows[0]["DIR_DATE"].ToString();
+
+                if ((dt.Rows[0]["DIR_STAND"].ToString() == "Supported") || (dt.Rows[0]["DIR_STAND"].ToString() == "Approved"))
+                {
+                    approvalStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    approvalStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //Regional Vice President
+
+                revpStandLabel.Text = dt.Rows[0]["VP_STAND"].ToString();
+                revpCommentLabel.Text = dt.Rows[0]["VP_COMMENT"].ToString();
+                revpDateReviewedLabel.Text = dt.Rows[0]["VP_DATE"].ToString();
+
+                if (dt.Rows[0]["VP_STAND"].ToString() == "Approved")
+                {
+                    revpStandLabel.ForeColor = System.Drawing.Color.Green;
+                }
+                else
+                {
+                    revpStandLabel.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
+    }
+    protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
+    {
+        Response.Redirect("~/ApprovalSupportFunction/Default.aspx");
+    }
+}

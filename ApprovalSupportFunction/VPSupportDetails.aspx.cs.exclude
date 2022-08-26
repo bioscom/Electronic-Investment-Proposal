@@ -1,0 +1,71 @@
+﻿using System;
+using System.Data;
+using System.Web.UI.WebControls;
+
+public partial class ApprovalSupportFunction_VPSupportDetails : CustomBasePage
+{
+    public string ProposalID = "";
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (Request.QueryString["Proposalid"].ToString() != null)
+        {
+            ProposalID = Request.QueryString["Proposalid"].ToString();
+            LoadVPSResponse();
+        }
+    }
+
+    private void LoadVPSResponse()
+    {
+        Proposal proposal = new Proposal(ProposalID);
+
+        projNumberLabel.Text = proposal.PROJ_NUM;
+        projTitleLabel.Text = proposal.PROJ_TITLE;
+        initiatorLabel.Text = proposal.PROJ_INIT;
+        dateInitLabel.Text = proposal.DATE_INIT;
+        dateSubmitLabel.Text = proposal.DATE_SUBMIT;
+        AmountJVLabel.Text = proposal.JV;
+        AmountSSLabel.Text = proposal.SS;
+
+        DataTable dt = db.VPSupportDetails(ProposalID);
+
+        VPDetailsGridView.DataSource = dt;
+        VPDetailsGridView.DataBind();
+
+        foreach (GridViewRow grdRow in VPDetailsGridView.Rows)
+        {
+            Label stand = (Label)VPDetailsGridView.Rows[grdRow.RowIndex].FindControl("labelStand");
+            stand.Font.Bold = true;
+
+            if (Convert.ToInt32(stand.Text) == SupportState.iSupported)
+            {
+                stand.ForeColor = System.Drawing.Color.Green;
+                stand.Text = SupportState.Supported;
+            }
+            else if (Convert.ToInt32(stand.Text) == SupportState.iApproved)
+            {
+                stand.ForeColor = System.Drawing.Color.Green;
+                stand.Text = SupportState.Approved;
+            }
+	    else if (Convert.ToInt32(stand.Text) == SupportState.iFinanceApproval)
+            {
+                stand.ForeColor = System.Drawing.Color.Green;
+                stand.Text = SupportState.Approved;
+            }
+            else if (Convert.ToInt32(stand.Text) == SupportState.iNotSupported)
+            {
+                stand.ForeColor = System.Drawing.Color.Red;
+                stand.Text = SupportState.NotSupported;
+            }
+            else if (Convert.ToInt32(stand.Text) == SupportState.iNotApproved)
+            {
+                stand.ForeColor = System.Drawing.Color.Red;
+                stand.Text = SupportState.NotApproved;
+            }
+            else
+            {
+                stand.Text = "";
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Previous Investment Proposal Updated - Awaiting Review</title>
+	</head>
+	<body>
+       <br /><br />
+       Dear Sir/Ma,<br /><br />
+       The IP Initiator has made an update on the <b>@@SUBJECT </b> investment proposal which you may want to review.<br />
+        <br /> 
+        <a href=@@URL> Click here</a> to access the system. <br /><br/>
+       <div>
+            In case of any difficulty please contact @SSSADMIN <br/>
+            on ext. @@EXT or @@EMAIL
+        </div>
+	</body>
+</html>

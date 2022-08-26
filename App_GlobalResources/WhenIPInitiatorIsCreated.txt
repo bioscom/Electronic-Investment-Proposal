@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>When IP Initiator is created</title>
+</head>
+<body>
+        <!--e-IP System Definition-->
+        Dear Sir/Ma,<br/><br/>
+        You have been defined as an IP Initiator/Owner on Corporate Planning's Electronic Investment Proposal(e-IP) System,<br/><br/>
+
+Next Steps: 
+        1. First, click <a href=@@URL?UserName=@@USERNAME> here </a> to confirm access to the system and accept the behavioural guidelines guiding the use of the system. <br/> 
+        2. Then please follow the instruction in this <a href='http://sww-knowledge-epg.shell.com/knowtepg1/livelink.exe?func=ll&objId=14078989&objAction=Open&viewType=1&nexturl=%2Fknowtepg1%2Flivelink%2Eexe%3Ffunc%3Dll%26objId%3D12093961%26objAction%3Dbrowse%26sort%3Dname'> link </a> to load your IP.<br/><br />
+        <div>
+            In case of any difficulty please contact @SSSADMIN<br/>
+            on ext. @@EXT or @@EMAIL
+        </div>
+</body>
+</html>

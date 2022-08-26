@@ -1,0 +1,204 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Web.UI.WebControls;
+
+
+public class FinanceSignatureApproval
+{
+    //
+
+    public FinanceSignatureApproval()
+    {
+
+    }
+
+    //public string FinanceSignature(Proposal proposal)
+    //{
+    //    SupportApprovalStatus support = new SupportApprovalStatus();
+    //    //This is required to accurately select between GM Finance SPDC, SNEPCO, SHLGB and Pectel
+    //    int EPNIGERIALOGIC = proposal.OriginatingUnit(proposal);
+
+    //    string sql = "";
+    //    DataSet ds = new DataSet();
+
+    //    IPInitiator IPInit = new IPInitiator(proposal.IDUSERMGT);
+
+    //    if (support.IPLTEQLowerQuartileLTEQ2ndQuartile(proposal))
+    //    {
+    //        sql = "SELECT EIP_USERMGT.USERMAIL, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT INNER JOIN CPDMS_FUNCTIONS ON EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID ";
+    //        sql += "WHERE ((EIP_USERMGT.COMPANYID = @COMPANYID) AND (EIP_USERMGT.USERROLESID = @xUSERROLESID) AND (EIP_USERMGT.STATUS = @STATUS)) ";
+    //        sql += "OR ((EIP_USERMGT.COMPANYID = @COMPANYID) AND (EIP_USERMGT.USERROLESID = @yUSERROLESID) AND (EIP_USERMGT.STATUS = @STATUS)) ";
+    //        sql += "AND (EIP_USERMGT.EPNIGERIALOGIC = @EPNIGERIALOGIC) AND (CPDMS_FUNCTIONS.FUNCTION = @FUNCTION)";
+
+    //        sql = sql.Replace("@COMPANYID", "'" + IPInit.iCompanyID + "'");
+    //        sql = sql.Replace("@xUSERROLESID", "'" + eipUserRoles.iFinanceSignature + "'");
+    //        sql = sql.Replace("@yUSERROLESID", "'" + eipUserRoles.iGM + "'");
+    //        sql = sql.Replace("@FUNCTION", "'" + cpdmsFunctionsNames.Finance + "'");
+    //        sql = sql.Replace("@EPNIGERIALOGIC", "'" + EPNIGERIALOGIC + "'");
+    //        sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+    //    }
+    //    else if (support.IPGT2ndQuartile(proposal))
+    //    {
+    //        //IP > $10mln Corporate Planning Sends to GM Finance of OU
+
+    //        sql = "SELECT EIP_USERMGT.USERMAIL, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT INNER JOIN CPDMS_FUNCTIONS ON EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID ";
+    //        sql += "WHERE (EIP_USERMGT.COMPANYID = @COMPANYID) AND (EIP_USERMGT.USERROLESID = @USERROLESID) AND (EIP_USERMGT.STATUS = @STATUS) ";
+    //        sql += "AND (EIP_USERMGT.EPNIGERIALOGIC = @EPNIGERIALOGIC) AND (CPDMS_FUNCTIONS.FUNCTION = @FUNCTION)";
+
+    //        sql = sql.Replace("@COMPANYID", "'" + IPInit.iCompanyID + "'");
+    //        sql = sql.Replace("@USERROLESID", "'" + eipUserRoles.iGM + "'");
+    //        sql = sql.Replace("@FUNCTION", "'" + cpdmsFunctionsNames.Finance + "'");
+    //        sql = sql.Replace("@EPNIGERIALOGIC", "'" + EPNIGERIALOGIC + "'");
+    //        sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+    //    }
+    //    return sql;
+    //}
+
+    //public string GetFinanceSupportUserIDByProposalID(string ProposalID)
+    //{
+    //    DataTable dt = new DataTable();
+    //    string FinanceSupportUserID = "";
+    //    string sql = "";
+    //    sql = "SELECT EIP_USERMGT.USERMAIL, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT INNER JOIN EIP_GMFINANCE ON EIP_USERMGT.IDUSERMGT = EIP_GMFINANCE.IDUSERMGT ";
+    //    sql += "WHERE (EIP_GMFINANCE.IDPROPOSAL = @IDPROPOSAL)";
+    //    sql = sql.Replace("@IDPROPOSAL", "'" + ProposalID + "'");
+
+    //    dt = DataAccess.ExecuteQueryCommand(sql);
+
+    //    if (dt.Rows.Count > 0)
+    //    {
+    //        FinanceSupportUserID = dt.Rows[0]["IDUSERMGT"].ToString();
+    //    }
+    //    else
+    //    {
+    //        //Check Finance Signature Table
+    //        sql = "SELECT EIP_USERMGT.USERMAIL, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT INNER JOIN EIP_FINANCESIGNATURE ON EIP_USERMGT.IDUSERMGT = EIP_FINANCESIGNATURE.IDUSERMGT ";
+    //        sql += "WHERE (EIP_FINANCESIGNATURE.IDPROPOSAL = @IDPROPOSAL)";
+    //        sql = sql.Replace("@IDPROPOSAL", "'" + ProposalID + "'");
+
+    //        dt = DataAccess.ExecuteQueryCommand(sql);
+    //        if (dt.Rows.Count > 0)
+    //        {
+    //            FinanceSupportUserID = dt.Rows[0]["IDUSERMGT"].ToString();
+    //        }
+    //    }
+    //    return FinanceSupportUserID;
+    //}
+
+    //public string GetVPFinanceSupportUserIDByProposalID(string ProposalID)
+    //{
+    //    string FinanceSupportUserID = "";
+
+    //    string sql = "SELECT EIP_USERMGT.IDUSERMGT FROM EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS, EIP_USERROLES ";
+    //    sql += "WHERE (EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+    //    sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERMGT.USERROLESID = EIP_USERROLES.ROLES) ";
+    //    sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.ROLEID = EIP_USERROLES.USERROLESID) ";
+    //    sql += "AND ((EIP_USERROLES.ROLES = '" + eipUserRoles.VP + "') AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "')) ";
+    //    sql += "AND (EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = '" + ProposalID + "')";
+
+    //    DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+
+    //    if (dt.Rows.Count > 0)
+    //    {
+    //        FinanceSupportUserID = dt.Rows[0]["IDUSERMGT"].ToString();
+    //    }
+    //    return FinanceSupportUserID;
+    //}
+
+    //public DataTable FinanceSignatureApprovalStatus(string ProposalID)
+    //{
+    //    string sql = "SELECT * FROM EIP_USERROLES, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS WHERE ";
+    //    sql += "(EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+    //    sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERROLES.USERROLESID = EIP_SUPPORTAPPROVERCOMMENTS.ROLEID) ";
+    //    sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = '" + ProposalID + "' ";
+    //    sql += "AND (EIP_USERROLES.ROLES = '" + eipUserRoles.FinanceSignature + "' ";
+    //    sql += "OR ((EIP_USERROLES.ROLES = '" + eipUserRoles.GM + "') AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "')))";
+
+    //    return DataAccess.ExecuteQueryCommand(sql);
+    //}
+
+    //public DataTable VPFinanceSignatureApprovalStatus(string ProposalID)
+    //{
+    //    string sql = "SELECT * FROM EIP_USERROLES, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS WHERE ";
+    //    sql += "(EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+    //    sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERROLES.USERROLESID = EIP_SUPPORTAPPROVERCOMMENTS.ROLEID) ";
+    //    sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = '" + ProposalID + "' ";
+    //    sql += "AND ((EIP_USERROLES.ROLES = '" + eipUserRoles.VP + "') AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "'))";
+
+    //    return DataAccess.ExecuteQueryCommand(sql);
+    //}
+
+    //public string GetVPFinance4FinanceSignature()
+    //{
+    //    string sql = "SELECT EIP_USERMGT.USERMAIL, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT, CPDMS_FUNCTIONS ";
+    //    sql += "WHERE (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERMGT.USERROLESID = '" + eipUserRoles.VP + "') ";
+    //    sql += "AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "') ";
+
+    //    return sql;
+    //}
+
+    //public bool IsFinanceSignatureFoundForThisIP(string ProposalID)
+    //{
+    //    bool found = false;
+
+    //    string sql = "SELECT * FROM EIP_USERROLES, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS WHERE ";
+    //    sql += "(EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+    //    sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERROLES.USERROLESID = EIP_SUPPORTAPPROVERCOMMENTS.ROLEID) ";
+    //    sql += "AND EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = '" + ProposalID + "' ";
+    //    sql += "AND (EIP_USERROLES.ROLES ='" + eipUserRoles.FinanceSignature + "' ";
+    //    sql += "OR ((EIP_USERROLES.ROLES = '" + eipUserRoles.GM + "') AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "')))";
+
+    //    DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+    //    if (dt.Rows.Count > 0)
+    //    {
+    //        found = true;
+    //    }
+
+    //    return found;
+    //}
+
+    //public bool IsVPFinanceFoundForThisIP(string ProposalID)
+    //{
+    //    bool found = false;
+    //    string sql = "SELECT * FROM EIP_USERROLES, EIP_SUPPORTAPPROVERCOMMENTS, EIP_USERMGT, CPDMS_FUNCTIONS ";
+    //    sql += "WHERE (EIP_SUPPORTAPPROVERCOMMENTS.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+    //    sql += "AND (EIP_USERMGT.FUNCTIONID = CPDMS_FUNCTIONS.FUNCTIONID) ";
+    //    sql += "AND (EIP_USERROLES.USERROLESID = EIP_SUPPORTAPPROVERCOMMENTS.ROLEID) ";
+    //    sql += "AND ((EIP_SUPPORTAPPROVERCOMMENTS.IDPROPOSAL = '" + ProposalID + "') ";
+    //    sql += "AND ((EIP_USERROLES.ROLES = '" + eipUserRoles.VP + "') ";
+    //    sql += "AND (CPDMS_FUNCTIONS.FUNCTION = '" + cpdmsFunctionsNames.Finance + "')))";
+
+    //    DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+    //    if (dt.Rows.Count > 0)
+    //    {
+    //        found = true;
+    //    }
+
+    //    return found;
+    //}
+
+    //public void GetFinancialApprover(DropDownList theDropDownList, string YYear)
+    //{
+    //    string sql = "SELECT DISTINCT EIP_USERMGT.FULLNAME, EIP_USERMGT.IDUSERMGT FROM EIP_USERMGT ";
+    //    sql += "WHERE EIP_USERMGT.USERROLESID LIKE '%" + eipUserRoles.FinanceSignature + "%' ";
+    //    sql += "AND TO_CHAR(TO_DATE(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY') ,'YYYY') = '" + YYear + "'";
+
+    //    DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+
+    //    theDropDownList.Items.Clear();
+    //    theDropDownList.Items.Add(new ListItem("Select Financial Approver", "-1"));
+    //    foreach (DataRow dr in dt.Rows)
+    //    {
+    //        string listItemText = dr[0].ToString();
+    //        string listItemValue = dr[1].ToString();
+    //        theDropDownList.Items.Add(new ListItem(listItemText, listItemValue));
+    //    }
+    //}
+}

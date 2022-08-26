@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Investment Proposal not Supported</title>
+</head>
+<body>
+<br /><br />
+        Dear Sir/Ma,<br /><br />
+        @@SUPPORTFUNCTIONFULLNAME, @@MYFUNCTION has reviewed your Investment Proposal for @@SUBJECT project and has <b><u> declined to support/approve</u></b> its current contents for the following reason: <br />
+        <b>
+            <div style='width:200px border=1 bordercolor=black'> 
+                @@REASONNOTSUPPORTED 
+            </div>
+        </b><br /><br />
+        In line with the IP processing flowchart, this automatically stops the processing pending when an updated IP is reloaded.<br/> 
+        Please discuss with the BPO on the next steps.<br/><br/>
+        The BPO will decide the recipient of the updated IP. <br /><br />
+        <a href=@@URL>Click here</a> to access the system.  <br />
+        <div>
+            In case of any difficulty please contact @SSSADMIN <br/>
+            on ext. @@EXT or @@EMAIL
+        </div>
+</body>
+</html>

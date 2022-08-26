@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.Data.OracleClient;
+
+/// <summary>
+/// Summary description for FunctionalPlanners
+/// </summary>
+public class FunctionalPlanners
+{
+    public FunctionalPlanners()
+    {
+        
+    }
+}
+
+public class FunctionalPlannerComments
+{
+   
+
+    private string m_sIDPROPOSAL;
+    private string m_sCOMMENTS;
+    private string m_sDATECOMMENT;
+    private string m_sDATERECEIVED;
+    private string m_sSTAND;
+
+    public FunctionalPlannerComments()
+    {
+
+    }
+
+    public FunctionalPlannerComments(string ProposalID)
+    {
+        string sql = "SELECT IDPROPOSAL, COMMENTS, DATE_COMMENT, STAND, DATE_RECEIVED FROM EIP_FUNCTIONALPLANNER WHERE IDPROPOSAL = @IDPROPOSAL";
+        sql = sql.Replace("@IDPROPOSAL", ProposalID);
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+        if (dt.Rows.Count > 0)
+        {
+            m_sIDPROPOSAL = dt.Rows[0]["IDPROPOSAL"].ToString();
+            m_sCOMMENTS = dt.Rows[0]["COMMENTS"].ToString();
+            m_sDATECOMMENT = dt.Rows[0]["DATE_COMMENT"].ToString();
+            m_sDATERECEIVED = dt.Rows[0]["DATE_RECEIVED"].ToString();
+            m_sSTAND = dt.Rows[0]["STAND"].ToString();
+        }
+    }
+
+    public string sIDPROPOSAL
+    {
+        get
+        {
+            return m_sIDPROPOSAL;
+        }
+    }
+
+    public string sCOMMENTS
+    {
+        get
+        {
+            return m_sCOMMENTS;
+        }
+    }
+
+    public string sDATECOMMENT
+    {
+        get
+        {
+            return m_sDATECOMMENT;
+        }
+    }
+
+    public string sDATERECEIVED
+    {
+        get
+        {
+            return m_sDATERECEIVED;
+        }
+    }
+
+    public string sSTAND
+    {
+        get
+        {
+            return m_sSTAND;
+        }
+    }
+
+    public DataTable GetFunctionalPlannerByUserName(string UserName)
+    {
+        string sql = "SELECT * FROM EIP_FUNCTIONALPLANNER WHERE UPPER(USERNAME) ='" + UserName.ToUpper() + "'";
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public string AddFunctionalPlanner(string UserName, DropDownList functionList, DropDownList companiesList)
+    {
+        string UserMail = "";
+
+        if (GetFunctionalPlannerByUserName(UserName).Rows.Count > 0) //i.e User already exists
+        {
+            AppStatusMessages.UserAlreadyExists(UserName);
+        }
+        else
+        {
+            //DataTable dsStaff = new DataTable();
+            appUsers CheckUser = new appUsers();
+            CompleteStaffDetails Me = appUsers.GetStaffInfo(UserName);
+
+            try
+            {
+                if (Me.USERNAME == null) //i.e. username not found on shell network
+                {
+                    AppStatusMessages.UserNotFoundOnStaffDatabase(UserName);
+                }
+                else if (Me.USERNAME != null) //username found on shell network
+                {
+                    if ((Me.FULL_NAME != null) && (Me.EMAIL != null))
+                    {
+                        string sqlUser = "SELECT IDPLANNER, USERNAME, FUNCTIONID, FULLNAME, USERMAIL, COMPANYID, STATUS FROM EIP_FUNCTIONALPLANNER";
+                        OracleConnection conn = new OracleConnection(AppConfiguration.DbConnectionString);
+                        OracleCommand myCommand = new OracleCommand(sqlUser, conn);
+                        OracleDataAdapter da = new OracleDataAdapter(myCommand);
+                        OracleCommandBuilder MyCB = new OracleCommandBuilder(da);
+
+                        DataSet dsSubmit = new DataSet();
+
+                        da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                        da.Fill(dsSubmit, "NewFunctionalPlanner");
+
+                        DataRow myRow = dsSubmit.Tables["NewFunctionalPlanner"].NewRow(); //add new row to the current table in the dataset
+
+                        myRow["IDPLANNER"] = 0; //this is not supposed to be necessary, it was working before it stopped working
+                        myRow["USERNAME"] = UserName.ToUpper();
+                        myRow["FUNCTIONID"] = functionList.SelectedValue;
+                        myRow["FULLNAME"] = Me.FULL_NAME;
+                        myRow["USERMAIL"] = Me.EMAIL;
+                        myRow["COMPANYID"] = companiesList.SelectedValue;
+
+                        dsSubmit.Tables["NewFunctionalPlanner"].Rows.Add(myRow); //add data to the new row in the current table in the dataset
+                        da.Update(dsSubmit, "NewFunctionalPlanner"); //use DataAdapter (da) to persist the new record back to the database
+                    }
+                    else
+                    {
+                        AppStatusMessages.UserInfoOnShellStaffDataBaseNotComplete(UserName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+                //AppStatusMessages.ConnectionToDataBaseServer(ex);
+            }
+        }
+        return UserMail;
+    }
+}

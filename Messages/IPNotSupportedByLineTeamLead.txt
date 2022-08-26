@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Investment Proposal Not Supported</title>
+</head>
+<body>
+    <br /><br />
+    Dear Sir/Ma,<br /><br />
+    Your Investment Proposal for @@SUBJECT has just been reviewed.
+    Your Line Team Lead, @@LINETEAMLEADFULLNAME, has <b><u> declined to support</u></b> for the following reason: <br />
+    <b><div style='width:200px border=1 bordercolor=black'> @@REASONNOTSUPPORTED </div></b> <br /><br />
+    You will need to reload an updated IP that addresses these concerns before processing can resume.<br/><br/>
+    <a href=@@URL>Click here</a> to access the system.<br />
+    <div>
+        In case of any difficulty please contact @SSSADMIN or @@SSADMN <br/>
+        on ext. @@EXT or @@EMAIL
+    </div>
+     
+</body>
+</html>

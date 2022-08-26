@@ -1,0 +1,90 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Data;
+
+/// <summary>
+/// Summary description for BOM
+/// </summary>
+public class BOM
+{
+    public BOM()
+    {
+        
+    }
+}
+
+
+public class BOMComments
+{
+   
+
+    private string m_sIDPROPOSAL;
+    private string m_sCOMMENTS;
+    private string m_sDATECOMMENT;
+    private string m_sDATERECEIVED;
+    private int m_iSTAND;
+    private int m_iIDUSERMGT;
+
+    public BOMComments()
+    {
+
+    }
+
+    public BOMComments(string ProposalID)
+    {
+        string sql = "SELECT IDPROPOSAL, IDUSERMGT, COMMENTS, DATE_COMMENT, STAND, DATE_RECEIVED FROM EIP_BOM WHERE IDPROPOSAL = :IDPROPOSAL";
+        sql = sql.Replace(":IDPROPOSAL", ProposalID);
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql); 
+        if (dt.Rows.Count > 0)
+        {
+            m_sIDPROPOSAL = dt.Rows[0]["IDPROPOSAL"].ToString();
+            m_sCOMMENTS = dt.Rows[0]["COMMENTS"].ToString();
+            m_sDATECOMMENT = dt.Rows[0]["DATE_COMMENT"].ToString();
+            m_sDATERECEIVED = dt.Rows[0]["DATE_RECEIVED"].ToString();
+            m_iSTAND = Convert.ToInt32(dt.Rows[0]["STAND"]);
+            m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+        }
+    }
+
+    public string sIDPROPOSAL
+    {
+        get
+        {
+            return m_sIDPROPOSAL;
+        }
+    }
+
+    public string sCOMMENTS
+    {
+        get
+        {
+            return m_sCOMMENTS;
+        }
+    }
+
+    public string sDATECOMMENT
+    {
+        get
+        {
+            return m_sDATECOMMENT;
+        }
+    }
+
+    public string sDATERECEIVED
+    {
+        get
+        {
+            return m_sDATERECEIVED;
+        }
+    }
+
+    public int iSTAND
+    {
+        get
+        {
+            return m_iSTAND;
+        }
+    }
+}

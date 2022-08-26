@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+
+public class Controller
+{
+    public Controller()
+    {
+
+    }
+
+    //public string Controllers(Proposal proposal)
+    //{
+    //    string sql = "";
+
+    //    decimal ShellShareDec = Convert.ToDecimal(proposal.SS);
+    //    int ShellShare = Convert.ToInt32(ShellShareDec * 100);
+
+    //    if (ShellShare <= (IPLimit.iSECONDQUARTILE * 100))
+    //    {
+    //        sql = "SELECT USERMAIL, IDUSERMGT FROM EIP_USERMGT WHERE ";
+    //        sql += "(IDIPLIMIT = '" + IPLimit.iSECONDQUARTILEID + "' OR IDIPLIMIT = '" + IPLimit.iTHIRDQUARTILEID + "' OR IDIPLIMIT = '" + IPLimit.iUPPERQUARTILEID + "') ";
+    //        sql += "AND USERROLESID = '" + eipUserRoles.iControllers + "' AND STATUS = '" + IPStatus.Activated + "'";
+    //    }
+    //    else if ((ShellShare > (IPLimit.iSECONDQUARTILE * 100)) && (ShellShare <= (IPLimit.iUPPERQUARTILE * 100)))
+    //    {
+    //        sql = "SELECT USERMAIL, IDUSERMGT FROM EIP_USERMGT WHERE ";
+    //        sql += "(IDIPLIMIT = '" + IPLimit.iTHIRDQUARTILEID + "' OR IDIPLIMIT = '" + IPLimit.iUPPERQUARTILEID + "') ";
+    //        sql += "AND USERROLESID = '" + eipUserRoles.iControllers + "' AND STATUS = '" + IPStatus.Activated + "'";
+    //    }
+    //    else if (ShellShare > (IPLimit.iUPPERQUARTILE * 100))
+    //    {
+    //        sql = "SELECT USERMAIL, IDUSERMGT FROM EIP_USERMGT WHERE ";
+    //        sql += "(IDIPLIMIT = '" + IPLimit.iTHIRDQUARTILEID + "' OR IDIPLIMIT = '" + IPLimit.iUPPERQUARTILEID + "') ";
+    //        sql += "AND USERROLESID = '" + eipUserRoles.iControllers + "' AND STATUS = '" + IPStatus.Activated + "'";
+    //    }
+    //    return sql;
+    //}
+}

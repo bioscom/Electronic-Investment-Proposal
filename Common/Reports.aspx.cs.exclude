@@ -1,0 +1,115 @@
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Data.OracleClient;
+using Microsoft.Reporting.WebForms;
+
+public partial class Common_Reports : CustomBasePage
+{
+    //TODO: This is not working
+    eIPReport _eIPReports = new eIPReport();
+    FinanceSignatureApproval FinanceSignature = new FinanceSignatureApproval();
+    TimeDateCulture dateCulture = new TimeDateCulture();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            LoadControls();
+            HideObjects();
+
+        }
+        //goButton.Attributes.Add("onClick", "return ValidateDateRange('" + fromCalendar + "', '" + toCalendar + "');");
+    }
+
+    private void HideObjects()
+    {
+        AdvancedReportPanel.Visible = false;
+    }
+
+    private void LoadControls()
+    {
+        eIPReport thisReport = new eIPReport();
+        //Fill in the User's Directorates(Function)
+        //db.FillFunctions(functionDBL);
+
+        //Fill the Shell Companies
+        //db.FillCompanies(OUList);
+
+        //Fill User Role. Not require now, but might be required later.
+        //db.FillDBL(userRoleDropDownList, db.UserRolesSQL);
+        
+        //Load All Organisational Approvers
+        //thisReport.OrganisationalApprovers(OrganisationalApproverList);
+
+        //Load IP Limits
+        thisReport.IPLimits(IPLimitDropDownList);
+        FinancialApproverDropDownList.Enabled = false;
+    }
+
+    protected void advancedReportLinkButton_Click(object sender, EventArgs e)
+    {
+        AdvancedReportPanel.Visible = true;
+    }
+
+    protected void OUList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        eIPReport thisReport = new eIPReport();
+        //Finance Approvers are loaded when OUList selected index is changed.
+        FinancialApproverDropDownList.Enabled = true;
+
+        //Load All Finance Approvers
+        //thisReport.FinanceApprovers(OUList.SelectedValue, FinancialApproverDropDownList);
+    }
+
+    protected void goButton_Click(object sender, EventArgs e)
+    {
+        //Write a Wizard Query for all reports.
+        string dateFROM = ""; string dateTO = "";
+        if ((fromCalendar.DateSelected.Length != 0) && (toCalendar.DateSelected.Length != 0))
+        {
+            //db db = new db();
+            string[] PFROM = fromCalendar.DateSelected.Split('/');
+            string[] PTO = toCalendar.DateSelected.Split('/');
+
+            dateFROM = dateCulture.SpecificDatePattern(Convert.ToInt32(PFROM[2]), Convert.ToInt32(PFROM[1]), Convert.ToInt32(PFROM[0]));
+            dateTO = dateCulture.SpecificDatePattern(Convert.ToInt32(PTO[2]), Convert.ToInt32(PTO[1]), Convert.ToInt32(PTO[0]));
+        }       
+
+        string sql = _eIPReports.MasterReporter(IPReportsDropDownList.SelectedItem.Text, OUList.SelectedValue, functionDBL.SelectedValue, IPLimitDropDownList.SelectedValue, FinancialApproverDropDownList.SelectedValue, OrganisationalApproverList.SelectedValue, dateFROM, dateTO);
+
+        OracleConnection conn = new OracleConnection(AppConfiguration.DbConnectionString);
+        OracleCommand myCommand = new OracleCommand(sql, conn);
+        OracleDataAdapter da = new OracleDataAdapter(myCommand);
+
+        OracleCommandBuilder MyCB = new OracleCommandBuilder(da);
+        DataSet ds = new DataSet();
+
+        //da.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+        conn.Open();
+        da.Fill(ds, "report");
+        ReportGenerator("ApprovedIPByYearOfApproval", "ApprovedIPByYearOfApproval_ApprovedIPByYearOfApproval", ds);
+    }
+
+    private void ReportGenerator(string ReportFileName, string ReportStruct, DataSet TheDataset)
+    {
+        //string sColorCode = "";
+        rptViewer.LocalReport.DataSources.Clear();
+        ReportDataSource myReportDataSource = new ReportDataSource(ReportStruct, TheDataset.Tables[0]);
+        rptViewer.LocalReport.DataSources.Clear();
+        rptViewer.LocalReport.DataSources.Add(myReportDataSource);
+        rptViewer.LocalReport.ReportPath = Server.MapPath("~/Reports/rptDocs/" + ReportFileName + ".rdlc");
+
+        ReportParameter[] oReportParams = new ReportParameter[1];
+        oReportParams[0] = new ReportParameter("sTitle", IPReportsDropDownList.SelectedItem.Text);
+        rptViewer.LocalReport.SetParameters(oReportParams);
+        rptViewer.LocalReport.Refresh();
+    }
+}

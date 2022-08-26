@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public class AddFunctionalPlannerController
+{   
+    public AddFunctionalPlannerController()
+    {
+
+    }
+
+    public void FormLoad(DropDownList functionList, DropDownList companiesList)
+    {
+        //Fill in the User's Directorates(Function)
+        db.FillFunctions(functionList);
+
+        //Fill the Shell Companies
+        db.FillCompanies(companiesList);
+    }
+
+    public void SubmitForm(appUsers OnlineUser, DropDownList functionList, DropDownList companiesList, TextBox userNameTextBox)
+    {
+        //TODo: finish the work here
+        // Add Functional Planner
+        appUserMgt oAppUserMgt = new appUserMgt();
+        FunctionalPlannerComments functionPlanner = new FunctionalPlannerComments();
+        functionPlanner.AddFunctionalPlanner(userNameTextBox.Text, functionList, companiesList);
+
+        sendMail oSendMail = new sendMail(OnlineUser.structUserIdx);
+        appUsers oFunctionalPlanner = oAppUserMgt.objGetUserByUserId(int.Parse(functionList.SelectedValue));
+
+        bool success = oSendMail.MailFunctionalPlannerUser(oFunctionalPlanner.structUserIdx);
+        if (success == true)
+        {
+            AppStatusMessages.UserRegistrationNotification();
+        }
+    }
+}

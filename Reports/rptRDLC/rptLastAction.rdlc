@@ -1,0 +1,708 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="EIPConnectionString">
+      <rd:DataSourceID>b51085f4-111c-4cec-998d-1d79cb0f734a</rd:DataSourceID>
+      <ConnectionProperties>
+        <DataProvider>ORACLE</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <ReportParameters>
+    <ReportParameter Name="sNoOfDays">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>sNoOfDays</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <RightMargin>0.2in</RightMargin>
+  <LeftMargin>0.2in</LeftMargin>
+  <PageHeader>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+    <ReportItems>
+      <Textbox Name="textbox18">
+        <Width>4.125in</Width>
+        <Style>
+          <FontSize>14pt</FontSize>
+          <FontWeight>700</FontWeight>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>2</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Left>0.875in</Left>
+        <Height>0.3in</Height>
+        <Value>Electronic Investment Proposal Report</Value>
+      </Textbox>
+      <Image Name="image1">
+        <Sizing>AutoSize</Sizing>
+        <Width>0.66667in</Width>
+        <MIMEType>image/gif</MIMEType>
+        <Source>Embedded</Source>
+        <Style />
+        <ZIndex>1</ZIndex>
+        <Value>p_shelllogo64</Value>
+      </Image>
+      <Textbox Name="textbox15">
+        <Top>0.375in</Top>
+        <Width>5.5in</Width>
+        <Style>
+          <FontSize>12pt</FontSize>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Left>0.875in</Left>
+        <Height>0.25in</Height>
+        <Value>="Proposals Last Actioned in the past " &amp; Parameters!sNoOfDays.Value &amp; " days"</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>0.66667in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+  </PageHeader>
+  <BottomMargin>0.2in</BottomMargin>
+  <rd:ReportID>59fa76e3-3758-49d3-b1b0-96c335cef1ad</rd:ReportID>
+  <EmbeddedImages>
+    <EmbeddedImage Name="p_shelllogo64">
+      <MIMEType>image/gif</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <PageWidth>11in</PageWidth>
+  <DataSets>
+    <DataSet Name="Report_ApprovedProposals">
+      <Fields>
+        <Field Name="FUNCTION">
+          <DataField>FUNCTION</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PROJ_NUM">
+          <DataField>PROJ_NUM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PROJ_TITLE">
+          <DataField>PROJ_TITLE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FULLNAME">
+          <DataField>FULLNAME</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="USERMAIL">
+          <DataField>USERMAIL</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DATE_INIT">
+          <DataField>DATE_INIT</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="JV">
+          <DataField>JV</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SS">
+          <DataField>SS</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DATE_SUBMIT">
+          <DataField>DATE_SUBMIT</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="DOC_STAND">
+          <DataField>DOC_STAND</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="DATE_LAST_ACTIONED">
+          <DataField>DATE_LAST_ACTIONED</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>EIPConnectionString</DataSourceName>
+        <CommandText>SELECT        CPDMS_FUNCTIONS."FUNCTION", EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, EIP_USERMGT.FULLNAME, EIP_USERMGT.USERMAIL, 
+                         CPDMS_SHELLCOMPANIES.COMPANYNAME, EIP_PROPOSAL.DATE_INIT, EIP_PROPOSAL.JV, EIP_PROPOSAL.SS, EIP_PROPOSAL.DATE_SUBMIT,
+                          EIP_PROPOSAL.DOC_STAND, EIP_PROPOSAL.DATE_LAST_ACTIONED
+FROM            CPDMS_FUNCTIONS, EIP_PROPOSAL, EIP_USERMGT, CPDMS_SHELLCOMPANIES
+WHERE        CPDMS_FUNCTIONS.FUNCTIONID = EIP_PROPOSAL.FUNCTIONID AND CPDMS_FUNCTIONS.FUNCTIONID = EIP_USERMGT.FUNCTIONID AND 
+                         EIP_PROPOSAL.IDUSERMGT = EIP_USERMGT.IDUSERMGT AND EIP_USERMGT.COMPANYID = CPDMS_SHELLCOMPANIES.COMPANYID</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Report</rd:DataSetName>
+        <rd:TableName>ApprovedProposals</rd:TableName>
+        <rd:TableAdapterName>ApprovedProposalsTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterFillMethod>FillProposals</rd:TableAdapterFillMethod>
+        <rd:TableAdapterGetDataMethod>GetProposals</rd:TableAdapterGetDataMethod>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <Width>10.5in</Width>
+  <Body>
+    <ReportItems>
+      <Table Name="table1">
+        <DataSetName>Report_ApprovedProposals</DataSetName>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="PROJ_NUM">
+                      <rd:DefaultName>PROJ_NUM</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!PROJ_NUM.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="PROJ_TITLE">
+                      <rd:DefaultName>PROJ_TITLE</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!PROJ_TITLE.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="FULLNAME">
+                      <rd:DefaultName>FULLNAME</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!FULLNAME.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="FUNCTION">
+                      <rd:DefaultName>FUNCTION</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!FUNCTION.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="COMPANYNAME">
+                      <rd:DefaultName>COMPANYNAME</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!COMPANYNAME.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="JV">
+                      <rd:DefaultName>JV</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <Format>C</Format>
+                        <TextAlign>Right</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!JV.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="SS">
+                      <rd:DefaultName>SS</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <Format>C</Format>
+                        <TextAlign>Right</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!SS.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="DATE_LAST_ACTIONED">
+                      <rd:DefaultName>DATE_LAST_ACTIONED</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!DATE_LAST_ACTIONED.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.25in</Height>
+            </TableRow>
+          </TableRows>
+        </Details>
+        <Style>
+          <BorderStyle>
+            <Default>Solid</Default>
+          </BorderStyle>
+        </Style>
+        <Header>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox1">
+                      <rd:DefaultName>textbox1</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Project Number</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox2">
+                      <rd:DefaultName>textbox2</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Project Title</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox3">
+                      <rd:DefaultName>textbox3</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>IP Initiator</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox11">
+                      <rd:DefaultName>textbox11</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Originating Function</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox4">
+                      <rd:DefaultName>textbox4</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>OU</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox10">
+                      <rd:DefaultName>textbox10</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <TextAlign>Left</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>JV (mln)</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox5">
+                      <rd:DefaultName>textbox5</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontWeight>700</FontWeight>
+                        <TextAlign>Left</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>SS (mln)</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox14">
+                      <rd:DefaultName>textbox14</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Date Last Actioned</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.25in</Height>
+            </TableRow>
+          </TableRows>
+          <RepeatOnNewPage>true</RepeatOnNewPage>
+        </Header>
+        <TableColumns>
+          <TableColumn>
+            <Width>1.125in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>2.25in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1.5in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1.625in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1.125in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>0.875in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>0.875in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1.125in</Width>
+          </TableColumn>
+        </TableColumns>
+        <Footer>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox7">
+                      <rd:DefaultName>textbox7</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox8">
+                      <rd:DefaultName>textbox8</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox9">
+                      <rd:DefaultName>textbox9</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox17">
+                      <rd:DefaultName>textbox17</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox6">
+                      <rd:DefaultName>textbox6</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <FontWeight>700</FontWeight>
+                        <Format>C</Format>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Total:</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox12">
+                      <rd:DefaultName>textbox12</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <FontWeight>700</FontWeight>
+                        <Format>C</Format>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Sum(Fields!JV.Value)</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox13">
+                      <rd:DefaultName>textbox13</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <FontWeight>700</FontWeight>
+                        <Format>C</Format>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Sum(Fields!SS.Value)</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox16">
+                      <rd:DefaultName>textbox16</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>SeaShell</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.25in</Height>
+            </TableRow>
+          </TableRows>
+        </Footer>
+      </Table>
+    </ReportItems>
+    <Height>0.75in</Height>
+  </Body>
+  <Language>en-US</Language>
+  <PageFooter>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+    <ReportItems>
+      <Textbox Name="textbox27">
+        <Width>4.25in</Width>
+        <Style>
+          <FontWeight>700</FontWeight>
+          <TextAlign>Center</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>1</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Left>5in</Left>
+        <Value>Copyright © 2009 Corporate Planning and Strategy, SPDC</Value>
+      </Textbox>
+      <Textbox Name="textbox21">
+        <Width>3.125in</Width>
+        <Style>
+          <TextAlign>Left</TextAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Value>="Page " &amp; Globals.PageNumber &amp; " of " &amp; Globals.TotalPages</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>0.25in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+  </PageFooter>
+  <TopMargin>0.2in</TopMargin>
+  <PageHeight>8.5in</PageHeight>
+</Report>

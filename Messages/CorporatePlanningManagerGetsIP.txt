@@ -1,0 +1,16 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Investment Proposal</title>
+	</head>
+	<body>
+        <br />
+        Dear Sir/Ma,<br /><br />
+            @@SUPPORTFUNCTION has reviewed @@SUBJECT Investment Proposal.<br /><br />
+            Please click <a href=@@URL?Proposalid=@@PROPOSALID>here</a> to access the system and forward this IP to MD.<br /><br />
+            <div>
+                In case of any difficulty please contact @SSSADMIN or @@SSADMN <br/>
+                on ext. @@EXT or @@EMAIL
+            </div>
+	</body>
+</html>

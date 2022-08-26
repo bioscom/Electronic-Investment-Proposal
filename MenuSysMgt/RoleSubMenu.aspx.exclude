@@ -1,0 +1,125 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPages/eIPMasterPage.master" AutoEventWireup="true" CodeFile="RoleSubMenu.aspx.cs" Inherits="MenuSysMgt_RoleSubMenu" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <table class="tMainBorder" style="width: 99%">
+        <tr>
+            <td class="cHeadTile">
+                EIP Menu System Management</td>
+        </tr>
+        <tr>
+            <td>
+                <asp:DropDownList ID="ddlUserRole" runat="server">
+                    <asp:ListItem Value="-1">Please Select User Role</asp:ListItem>
+                </asp:DropDownList>
+&nbsp;
+                </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label4" runat="server" Font-Bold="True" Text="Parent:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:DropDownList ID="ddlParentMenu" runat="server" AutoPostBack="True" 
+                                onselectedindexchanged="ddlParentMenu_SelectedIndexChanged">
+                                <asp:ListItem Value="-1">Please Select Parent Menu</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label1" runat="server" Font-Bold="True" Text="Title:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="titleTextBox" runat="server" Width="300px"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label2" runat="server" Font-Bold="True" Text="Description:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="descTextBox" runat="server" Height="50px" TextMode="MultiLine" 
+                                Width="300px"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label3" runat="server" Font-Bold="True" Text="Navigate URL:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="navigateURLTextBox" runat="server" Width="500px"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;</td>
+                        <td>
+                            <asp:Button ID="addButton" runat="server" onclick="addButton_Click" Text="Add" 
+                                Width="80px" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <asp:GridView id="grdView" runat="server" 
+                    AutoGenerateColumns="False" onrowcommand="grdView_RowCommand" 
+                    AllowPaging="True" PageSize="15" Width="100%" onsorted="grdView_Sorted" 
+                    onsorting="grdView_Sorting" AllowSorting="True" 
+                    onpageindexchanging="grdView_PageIndexChanging">
+                    <Columns>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <%# Container.DataItemIndex + 1 %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="...">
+                            <ItemTemplate>
+                                <asp:CheckBox id="BPOCheckBox" runat="server" MENUID='<%# DataBinder.Eval(Container.DataItem, "MENUID") %>' />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Title" SortExpression="TITLE">
+                            <ItemTemplate>
+                                <asp:Label id="labelTitle" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "TITLE") %>' ForeColor="#003366" Font-Bold="True"></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Description" SortExpression="DESCRIPTION">
+                            <ItemTemplate>
+                                <asp:Label id="labelDescription" runat="server"  
+                                Text='<%# DataBinder.Eval(Container.DataItem, "DESCRIPTION") %>'></asp:Label>
+                            </ItemTemplate>
+                            <ItemStyle Wrap="True"></ItemStyle>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Navigate Url" SortExpression="NAVIGATEURL">
+                            <ItemTemplate>
+                                <asp:Label id="labelUrl" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "NAVIGATEURL") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Parent Menu" SortExpression="PARENT">
+                            <ItemTemplate>
+                                <asp:Label id="labelAmountJV" runat="server" style="color:Green" Font-Bold="True" Text='<%# DataBinder.Eval(Container.DataItem, "PARENT") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="cHeadTile">
+                &nbsp;</td>
+        </tr>
+    </table>
+</asp:Content>
+

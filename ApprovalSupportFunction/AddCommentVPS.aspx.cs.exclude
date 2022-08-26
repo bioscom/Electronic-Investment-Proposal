@@ -1,0 +1,331 @@
+﻿using System;
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class ApprovalSupportFunction_AddCommentVPS : CustomBasePage
+{
+    SendMail MyMail = new SendMail();
+    SupportApprovalStatus SupportApproval = new SupportApprovalStatus();
+    Proposal proposal = new Proposal();
+    appUsers CurrentUser = new appUsers();
+    TimeDateCulture dateCulture = new TimeDateCulture();
+
+    string ProposalID = "";
+    string mSubject = "";
+    string[] SenderMail = { "" };
+    string[] IPInitiatorMail = { "" };
+    string[] GMREPlanEmail = { "" };
+    string[] EPGIPTrackerMail = { "" };
+    string[] BPOMail = { "" };
+    string[] REVPMail = { "" };
+    bool IPValue = false;
+    bool success = false;
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Request.QueryString["Proposalid"] != null)
+            {
+                ProposalID = Request.QueryString["Proposalid"].ToString();
+                proposal = new Proposal(ProposalID);
+
+                CurrentUser = new appUsers(Apps.LoginIDNoDomain(User.Identity.Name));
+
+                //DateRevTextBox.Text = dateCulture.GetTodaysDateInBritishFormat();
+                mSubject = proposal.PROJ_TITLE;
+
+                //Get the IP Reviewer's Information
+                SenderMail[0] = CurrentUser.sUSERMAIL;
+                IPInitiator IPInit = new IPInitiator(proposal.IDUSERMGT);
+                BusinessProcessOwner BPO = new BusinessProcessOwner(IPInit.iCompanyID);
+                BPOMail[0] = BPO.sUserMail;
+                IPInitiatorMail[0] = IPInit.sUserMail;   //db.GetIPInitiatorEmailAddressByProposalID(ProposalID);
+                REVPMail[0] = REVP.sUserMail;
+
+                SupportLabel.Text = "Vice President " + CurrentUser.Function;
+                projTitleLabel.Text = proposal.PROJ_NUM + " <--> " + proposal.PROJ_TITLE;
+
+                if (!IsPostBack)
+                {
+                    if ((CurrentUser.iUSERROLESID == eipUserRoles.iVP) && (CurrentUser.Function != cpdmsFunctionsNames.Finance))
+                    {
+                        VPComments MyComment = new VPComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+                        CommentTextBox.Text = MyComment.sCOMMENTS;
+                        SupportStandDropDownList.Items.Clear();
+                        if (SupportApproval.IPLessThan3rdQuartile(proposal) == true)
+                        {
+                            db.FillApproveState(SupportStandDropDownList);
+                        }
+                        else if (SupportApproval.IPLessThan3rdQuartile(proposal) == false)
+                        {
+                            db.FillSupportState(SupportStandDropDownList);
+                        }
+                    }
+                    else if ((CurrentUser.iUSERROLESID == eipUserRoles.iVP) && (CurrentUser.Function == cpdmsFunctionsNames.Finance))
+                    {
+                        VPFinanceComments MyComment = new VPFinanceComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+                        VPComments VPFinAsVP = new VPComments(proposal.IDPROPOSAL, CurrentUser.iIDUSERMGT);
+                        if (SupportApproval.IPGT2ndQuartile(proposal) == false)
+                        {
+                            SupportStandDropDownList.Items.Clear();
+                            db.FillApproveState(SupportStandDropDownList);
+                            CommentTextBox.Text = VPFinAsVP.sCOMMENTS;
+                        }
+                        else
+                        {
+                            CommentTextBox.Text = MyComment.sCOMMENTS;
+                            SupportStandDropDownList.Items.Clear();
+                            db.FillFinanceApprovalState(SupportStandDropDownList);
+                        }
+                    }
+                    else if (CurrentUser.iUSERROLESID == eipUserRoles.iMD)
+                    {
+                        //If this guy is an MD, check the Value of the IP (SS)
+                        MDComments MyComment = new MDComments(proposal.IDPROPOSAL);
+                        VPComments MDAsVP = new VPComments(proposal.IDPROPOSAL);
+                        if (SupportApproval.IPLT3rdQuartileGT2ndQuartile(proposal) == true)
+                        {
+                            //Note: When the Value of the IP is > $10mln and < $20mln The MD is either the final approver or not.
+                            //If MD is the final approver, he functions as a VP, if he is not he functions as an MD
+                            if (MyComment.MDReceivedIP() == true)
+                            {
+                                SupportStandDropDownList.Items.Clear();
+                                db.FillSupportState(SupportStandDropDownList);
+                                CommentTextBox.Text = MyComment.sCOMMENTS;
+                            }
+                            else if (MDAsVP.VPReceivedIP() == true)
+                            {
+                                SupportStandDropDownList.Items.Clear();
+                                db.FillApproveState(SupportStandDropDownList);
+                                CommentTextBox.Text = MDAsVP.sCOMMENTS;
+                            }
+                        }
+                        else if (SupportApproval.IPGT2ndQuartile(proposal) == false)
+                        {
+                            //Note: Whenever an MD receives IP as final approver, He functions as a VP, so the details of his approver is found in the EIP_VP table
+                            if (MDAsVP.VPReceivedIP() == true)
+                            {
+                                SupportStandDropDownList.Items.Clear();
+                                db.FillApproveState(SupportStandDropDownList);
+                                CommentTextBox.Text = MDAsVP.sCOMMENTS;
+                            }
+                        }
+                        else if (SupportApproval.IPGTEQ3rdQuartile(proposal) == true)
+                        {
+                            if (MyComment.MDReceivedIP() == true)
+                            {
+                                SupportStandDropDownList.Items.Clear();
+                                db.FillSupportState(SupportStandDropDownList);
+                                CommentTextBox.Text = MyComment.sCOMMENTS;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.Message.ToString());
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+    }
+
+    protected void forwardButton_Click(object sender, EventArgs e)
+    {
+        if ((CommentTextBox.Text == "") && ((SupportStandDropDownList.SelectedValue == SupportState.iNotSupported.ToString()) || (SupportStandDropDownList.SelectedValue == SupportState.iNotApproved.ToString())))
+        {
+            MessageBox.Show("Please, enter reason(s) why Not Supported/Not Approved in the comment box.");
+        }
+        else
+        {
+            int stand = Convert.ToInt32(SupportStandDropDownList.SelectedValue);
+            string comment = CommentTextBox.Text.Replace("'", "''");
+
+            //If IP value is Greater than $10mln, SECOND QUARTILE, then call the VP Finance Class
+            IPValue = SupportApproval.IPLTEQ3rdQuartileGT2ndQuartile(proposal);
+            if (IPValue == true)  //It means that VP can Approve the IP since it is <= $20mln (i.e 3rd Quartile). 
+            {
+                if (stand == SupportState.iFinanceApproval)
+                {
+                    //Mail BPO Copy IP Initiator
+                    VPFinanceComments.VPFinanceAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                }
+                
+                else if (stand == SupportState.iSupported)
+                {
+                    //MD supports the Investment Proposal since he is not the final approval
+                    MDComments MD = new MDComments(proposal.IDPROPOSAL);
+                    if (MD.MDReceivedIP() == true)
+                    {
+                        MDComments.MDAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                    }
+                }
+		else if (stand == SupportState.iApproved)
+                {
+                    //Update the DOC_STAND to show that the IP approval process for the IP has been COMPLETED
+                    //This is very important when sending SLA mails, the query will select only IP's whose process has not been completed.
+
+                    //Mail BPO Copy IP Initiator
+                    bool success = VPComments.VPAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                    db.UpdateDOCSTAND(ProposalID); //The life cycle of the IP ends here if < $20Mln 
+                    success = MyMail.ProposalApproved(BPOMail, SenderMail[0], mSubject, IPInitiatorMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM);
+                    MessageBox.Show("Proposal successfully approved. \n\nIP Initiator and Business Process Owner have been notified, \nthank you very much.");
+                }
+                else if ((stand == SupportState.iNotApproved) || (stand == SupportState.iNotSupported))
+                {
+                    //Send Mail to BPO for IP redress
+                    proposal.ProposalNotSupported(proposal, CurrentUser, mSubject, comment);
+                    MessageBox.Show("Proposal Not Approved, IP Initiator and Business Process Owner have been notified.");
+                }
+                Response.Redirect("~/ApprovalSupportFunction/PendingProposal.aspx");
+            }
+            else if (SupportApproval.IPLTEQ2ndQuartile(proposal))
+            {
+                if (stand == SupportState.iApproved)
+                {
+                    //Update the DOC_STAND to show that the IP approval process for the IP has been COMPLETED
+                    //This is very important when sending SLA mails, the query will select only IP's whose process has not been completed.
+
+                    //Mail BPO Copy IP Initiator
+                    bool success = VPComments.VPAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                    db.UpdateDOCSTAND(ProposalID); //The life cycle of the IP ends here if < $20Mln 
+                    success = MyMail.ProposalApproved(BPOMail, SenderMail[0], mSubject, IPInitiatorMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM);
+                    MessageBox.Show("Proposal successfully approved. \n\nIP Initiator and Business Process Owner have been notified, \nthank you very much.");
+                }
+                else if ((stand == SupportState.iNotApproved) || (stand == SupportState.iNotSupported))
+                {
+                    //Send Mail to BPO for IP redress
+                    proposal.ProposalNotSupported(proposal, CurrentUser, mSubject, comment);
+                    MessageBox.Show("Proposal Not Approved, IP Initiator and Business Process Owner have been notified.");
+                }
+                Response.Redirect("~/ApprovalSupportFunction/PendingProposal.aspx");
+            }
+            else if (IPValue == false) //(i.e. IP Value > $20mln)
+            {
+                GMREPLANComments GMRE = new GMREPLANComments(proposal.IDPROPOSAL);
+                bool HasGMREPlanSupported = GMRE.GMREPlanStand();
+
+                if (HasGMREPlanSupported == true)
+                {
+                    bool success = VPComments.VPAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                    bool HasAllVPSupported = SupportApproval.HasAllVPSupportedIP(ProposalID);
+                    if (HasAllVPSupported == true)
+                    {
+                        //Assign the Proposal to the REVP and mail REVP
+                        VPComments VP = new VPComments();
+                        VP.AssignProposalToREVP(REVP.sUserID, ProposalID);
+
+                        proposal.ProposalActionTrail(proposal.IDPROPOSAL, CurrentUser);
+
+                        //Send Mail to The REVP for IP Approver
+                        REVPMail[0] = REVP.sUserMail;
+
+                        int xNo = db.NoOfAwaitingSupport(ProposalID);
+                        success = MyMail.MailRegionalVicePresident(REVPMail, SenderMail[0], mSubject, IPInitiatorMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM);
+                        success = MyMail.IPSupported(IPInitiatorMail, SenderMail[0], SupportLabel.Text, mSubject, BPOMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM, xNo);
+
+                        //Mail EPG IP Tracker
+                        MailEPGIPTracker();
+
+                        MessageBox.Show("Proposal successfully forwarded to Regional Vice President. \n\nIP Initiator, EPG IP Tracker and Business Process Owner have been notified, \nthank you very much.");
+                    }
+                    //else
+                    //{
+                    //    Response.Redirect("~/ApprovalSupportFunction/PendingProposal.aspx");
+                    //}
+                }
+                else if (HasGMREPlanSupported == false) //in this case the GMREPlan might not be required in the flow if the IP Value is <= $20mln
+                {
+                    if (stand == SupportState.iSupported) //i.e MD Supported the IP
+                    {
+                        MDComments.MDAddCommentProcedure(CurrentUser, proposal, comment, stand, DateTime.Today.Date.ToShortDateString());
+                        ForwardProposalToGMREPlan();    //Forward the proposal to GM Regional Planning
+                        MailEPGIPTracker(); //Mail EPG IP Tracker
+                        MessageBox.Show("Proposal successfully forwarded to GM Regional Planning. \n\nIP Initiator, EPG IP Tracker and Business Process Owner have been notified, \nthank you very much.");
+                    }
+                    else if (stand == SupportState.iNotSupported)
+                    {
+                        proposal.ProposalNotSupported(proposal, CurrentUser, mSubject, comment);
+
+                        //Mail EPG IP Tracker
+                        MailEPGIPTracker();
+
+                        MessageBox.Show("Proposal Not Supported. \n\nIP Initiator, EPG IP Tracker and Business Process Owner have been notified.");
+                    }
+                }
+            }
+        }
+    }
+
+    private void ForwardProposalToGMREPlan()
+    {
+        MDComments MD = new MDComments();
+        MD.AssignIPtoGMREPlanning(GMREPlan.sUserID, ProposalID);
+
+        //Send Automatic Mail to GM Regional Planning, Copy the IP Initiator and the BPO (Corporate Planning)
+        GMREPlanEmail[0] = GMREPlan.sUserMail;
+        MailBPOs(SupportLabel);
+
+        success = MyMail.MailGMREPlanning(GMREPlanEmail, SenderMail[0], mSubject, IPInitiatorMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM);
+    }
+
+    private void MailBPOs(Label SupportLabel)
+    {
+        int xNo = db.NoOfAwaitingSupport(ProposalID);
+        success = MyMail.IPSupported(IPInitiatorMail, SenderMail[0], SupportLabel.Text, mSubject, BPOMail[0], ApplicationURL.MyAppURL(), proposal.PROJ_NUM, xNo);
+    }
+
+    private void MailEPGIPTracker()
+    {
+        bool IPValueGrterThan20 = SupportApproval.IPLessThan3rdQuartile(proposal);
+        if (IPValueGrterThan20 == false)
+        {
+            EPGIPTrackerMail[0] = db.GetEPGIPTrackerEmail();
+            bool EPGIPTrackerSuccess = MyMail.mailEPGIPTrackerOnIPUpdate(EPGIPTrackerMail, CurrentUser.sUSERMAIL, proposal.PROJ_NUM, mSubject, ApplicationURL.MyAppURL(), ProposalID);
+        }
+    }
+
+    protected void closeButton_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/ApprovalSupportFunction/PendingProposal.aspx");
+    }
+
+    //Digital Signatures Code
+    protected void digiSignImgBtn_Click(object sender, ImageClickEventArgs e)
+    {
+        WriteFile MyFile = new WriteFile();
+
+        try
+        {
+            Proposal proposal = new Proposal(ProposalID);
+            byte[] MyData = MyFile.DownLoadProposal(proposal.ProposalFileName);
+
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment;filename=Proposal.pdf");
+            Response.AddHeader("Content-Length", Convert.ToString(MyData.Length));
+            Response.BinaryWrite(MyData);
+            Response.End();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+    }
+
+    protected void uploadButton_Click(object sender, EventArgs e)
+    {
+        Proposal proposal = new Proposal(ProposalID);
+        SaveIP2FileSystem UpLoadMe = new SaveIP2FileSystem();
+        string sFileName = UpLoadMe.UploadInvestmentProposal(UploadProposal, proposal);
+        if (sFileName != "")
+        {
+            //Please you have to save this newly generated filename into PROPOSALFILENAME field in EIP_PROPOSAL table.
+            string sql = "UPDATE EIP_PROPOSAL SET PROPOSALFILENAME = '" + sFileName + "' WHERE IDPROPOSAL = '" + ProposalID + "'";
+            DataAccess.ExecuteNonQueryCommand(sql);
+            MessageBox.Show("Proposal successfully attached.");
+        }
+    }
+}

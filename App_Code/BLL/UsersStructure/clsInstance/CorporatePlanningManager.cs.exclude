@@ -1,0 +1,334 @@
+﻿using System;
+using System.Data;
+
+public class CorporatePlanningManager
+{
+    private string m_sIDCPMIPMGT;
+    private string m_sIDPROPOSAL;
+    private int m_iIDUSERMGT;
+    private string m_sFORWARDEDTOMD;
+    private string m_sDATEFORWARDED;
+    private string m_sCOMMENTS;
+    private string m_sDATERECEIVED;
+    private int m_iSTAND;
+
+    private string m_sFULLNAME;
+    private string m_sUSERMAIL;
+
+    //public CorporatePlanningManager()
+    //{
+
+    //}
+
+    //This method is used to select the Corporate Planning Manager meant for a particular IP from a particular Organisational Unit
+    public CorporatePlanningManager(string ProposalID)
+    {
+        try
+        {
+            string sql = "SELECT EIP_CPMIPMGT.IDCPMIPMGT, EIP_CPMIPMGT.IDUSERMGT, EIP_CPMIPMGT.IDPROPOSAL, ";
+            sql += "EIP_CPMIPMGT.FORWARDEDTOMD, EIP_CPMIPMGT.STAND, EIP_CPMIPMGT.COMMENTS, EIP_USERMGT.FULLNAME, EIP_USERMGT.USERMAIL, ";
+            sql += "TO_CHAR(EIP_CPMIPMGT.DATEFORWARDED, 'DD-MON-YYYY')DATEFORWARDED, TO_CHAR(EIP_CPMIPMGT.DATE_RECEIVED, 'DD-MON-YYYY')DATE_RECEIVED ";
+            sql += "FROM EIP_CPMIPMGT, EIP_USERMGT WHERE (EIP_CPMIPMGT.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+            sql += "AND (EIP_CPMIPMGT.IDPROPOSAL = @IDPROPOSAL) AND (EIP_USERMGT.STATUS = @STATUS)";
+            sql = sql.Replace("@IDPROPOSAL", "'" + ProposalID + "'");
+            sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+
+            DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+            if (dt.Rows.Count > 0)
+            {
+                m_sIDCPMIPMGT = dt.Rows[0]["IDCPMIPMGT"].ToString();
+                m_sIDPROPOSAL = dt.Rows[0]["IDPROPOSAL"].ToString();
+                m_sFORWARDEDTOMD = dt.Rows[0]["FORWARDEDTOMD"].ToString();
+                m_sDATEFORWARDED = dt.Rows[0]["DATEFORWARDED"].ToString();
+                m_sCOMMENTS = dt.Rows[0]["COMMENTS"].ToString();
+                m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+                m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+                m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+                m_iSTAND = Convert.ToInt32(dt.Rows[0]["STAND"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.ToString());
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+    }
+
+    public CorporatePlanningManager(int CompanyID, int EPNigeriaLogic)
+    {
+        try
+        {
+            string sql = "SELECT IDUSERMGT, USERNAME, FULLNAME, USERMAIL, USERROLESID, FUNCTIONID, COMPANYID, EPNIGERIALOGIC, STATUS FROM EIP_USERMGT ";
+            sql += "WHERE (EPNIGERIALOGIC = @EPNIGERIALOGIC) AND (COMPANYID = @COMPANYID) AND (USERROLESID = @USERROLESID)";
+            sql = sql.Replace("@EPNIGERIALOGIC", "'" + EPNigeriaLogic + "'");
+            sql = sql.Replace("@COMPANYID", "'" + CompanyID + "'");
+            sql = sql.Replace("@USERROLESID", "'" + eipUserRoles.iCorporatePlanningManager + "'");
+            sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+
+            DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+            if (dt.Rows.Count > 0)
+            {
+                m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+                m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+                m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+            }
+            else
+            {
+                MessageBox.Show("Sorry, this IP can not be approved or supported for this reason:\n\n" +
+                            "The Organisational Unit(OU) Corporate Planning Manager for this \n" +
+                            "Investment Proposal has not accepted his/her role or does not exist in eIP.\n" +
+                            "Please, forward this message with the Proposal Number, \n" +
+                            "to the OU Business Process Owner for this IP or Central System Administrator. \n\n" +
+                            "Thank you.");
+            }
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.ToString());
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+    }
+
+    public CorporatePlanningManager()
+    {
+        try
+        {
+            string sql = "SELECT IDUSERMGT, USERNAME, FULLNAME, USERMAIL, USERROLESID, FUNCTIONID, COMPANYID, EPNIGERIALOGIC, STATUS FROM EIP_USERMGT ";
+            sql += "WHERE (USERROLESID = @USERROLESID)";
+            sql = sql.Replace("@USERROLESID", "'" + eipUserRoles.iCorporatePlanningManager + "'");
+            sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+
+            DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+            if (dt.Rows.Count > 0)
+            {
+                m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+                m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+                m_iIDUSERMGT = Convert.ToInt32(dt.Rows[0]["IDUSERMGT"]);
+            }
+            else
+            {
+                MessageBox.Show("Sorry, this IP can not be approved or supported for this reason:\n\n" +
+                            "The Organisational Unit(OU) Corporate Planning Manager for this \n" +
+                            "Investment Proposal has not accepted his/her role or does not exist in eIP.\n" +
+                            "Please, forward this message with the Proposal Number, \n" +
+                            "to the OU Business Process Owner for this IP or Central System Administrator. \n\n" +
+                            "Thank you.");
+            }
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.ToString());
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+    }
+
+    public string sIDCPMIPMGT
+    {
+        get
+        {
+            return m_sIDCPMIPMGT;
+        }
+    }
+
+    public string sIDPROPOSAL
+    {
+        get
+        {
+            return m_sIDPROPOSAL;
+        }
+    }
+
+    public int iIDUSERMGT
+    {
+        get
+        {
+            return m_iIDUSERMGT;
+        }
+    }
+
+    public string sFORWARDEDTOMD
+    {
+        get
+        {
+            return m_sFORWARDEDTOMD;
+        }
+    }
+
+    public string sDATEFORWARDED
+    {
+        get
+        {
+            return m_sDATEFORWARDED;
+        }
+    }
+
+    public string sCOMMENTS
+    {
+        get
+        {
+            return m_sCOMMENTS;
+        }
+    }
+
+    public string sDATERECEIVED
+    {
+        get
+        {
+            return m_sDATERECEIVED;
+        }
+    }
+
+    public int iSTAND
+    {
+        get
+        {
+            return m_iSTAND;
+        }
+    }
+
+
+    public string sFULLNAME
+    {
+        get
+        {
+            return m_sFULLNAME;
+        }
+    }
+
+    public string sUSERMAIL
+    {
+        get
+        {
+            return m_sUSERMAIL;
+        }
+    }
+
+    public bool CPMStand()
+    {
+        bool Supported = false;
+        if (iSTAND == SupportState.iSupported)
+        {
+            Supported = true;
+        }
+        return Supported;
+    }
+
+    
+
+    public bool CPMExistsForOU(string ProposalID, int EPNigeriaLogic)
+    {
+        bool CPMExists = false;
+
+        try
+        {
+            string sql = "SELECT EIP_CPMIPMGT.IDCPMIPMGT, EIP_CPMIPMGT.IDUSERMGT, EIP_CPMIPMGT.IDPROPOSAL, ";
+            sql += "EIP_CPMIPMGT.FORWARDEDTOMD, EIP_CPMIPMGT.STAND, EIP_CPMIPMGT.COMMENTS, EIP_USERMGT.FULLNAME, EIP_USERMGT.USERMAIL, ";
+            sql += "TO_CHAR(EIP_CPMIPMGT.DATEFORWARDED, 'DD-MON-YYYY')DATEFORWARDED, TO_CHAR(EIP_CPMIPMGT.DATE_RECEIVED, 'DD-MON-YYYY')DATE_RECEIVED ";
+            sql += "FROM EIP_CPMIPMGT, EIP_USERMGT WHERE (EIP_CPMIPMGT.IDUSERMGT = EIP_USERMGT.IDUSERMGT) ";
+            sql += "AND (EIP_CPMIPMGT.IDPROPOSAL = @IDPROPOSAL) AND (EIP_USERMGT.EPNIGERIALOGIC = @EPNIGERIALOGIC) AND (EIP_USERMGT.STATUS = @STATUS)";
+            sql = sql.Replace("@EPNIGERIALOGIC", "'" + EPNigeriaLogic + "'");
+            sql = sql.Replace("@IDPROPOSAL", "'" + ProposalID + "'");
+            sql = sql.Replace("@STATUS", "'" + IPStatus.Activated + "'");
+
+            DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+            if (dt.Rows.Count > 0)
+            {
+                CPMExists = true;
+            }
+            else
+            {
+                CPMExists = false;
+                //MessageBox.Show("Sorry, this IP can not be approved or supported for this reason:\n\n" +
+                //            "The Organisational Unit(OU) Corporate Planning Manager for this \n" +
+                //            "Investment Proposal has not accepted his/her role or does not exist in eIP.\n" +
+                //            "Please, forward this message, with the IP Number, \n" +
+                //            "to the OU Business Process Owner for this IP or Central System Administrator. \n\n" +
+                //            "Thank you.");
+            }
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.ToString());
+            System.Diagnostics.Debug.Fail(ex.TargetSite.Name + "\n \n" + ex.StackTrace + "\n \n" + ex.Message.ToString());
+        }
+        return CPMExists;
+    }
+
+    public bool CorporatePlanningManagerReceivedIP()
+    {
+        bool IPFound = false;
+        if (sIDPROPOSAL != null)
+        {
+            IPFound = true;
+        }
+        return IPFound;
+    }
+
+
+    public DataTable MyPendingProposal(string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, ";
+        sql += "EIP_USERMGT.FULLNAME AS PROJ_INIT, TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_CPMIPMGT.COMMENTS ";
+        sql += "FROM EIP_PROPOSAL ";
+        sql += "INNER JOIN EIP_CPMIPMGT ON EIP_PROPOSAL.IDPROPOSAL = EIP_CPMIPMGT.IDPROPOSAL ";
+        sql += "INNER JOIN EIP_USERMGT ON EIP_PROPOSAL.IDUSERMGT = EIP_USERMGT.IDUSERMGT ";
+        sql += "WHERE (EIP_CPMIPMGT.IDUSERMGT = '" + UserID + "') AND (EIP_PROPOSAL.STATUS = '" + IPStatus.Activated + "') ";
+        sql += "AND ((EIP_CPMIPMGT.STAND = '" + SupportState.iNotSupported + "') OR (EIP_CPMIPMGT.STAND = '" + SupportState.iStandDefault + "')) ";
+        sql += "AND (EIP_PROPOSAL.DISCONTINUE <> '" + IPStatus.Discontinued + "')";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public DataTable MyProposalHistory(string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.IDPROPOSAL, EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, EIP_USERMGT.FULLNAME AS PROJ_INIT, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY')DATE_INIT, TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY')DATE_SUBMIT, EIP_CPMIPMGT.COMMENTS, TO_CHAR(EIP_CPMIPMGT.DATEFORWARDED, 'DD-MON-YYYY')DATE_COMMENT ";
+        sql += "FROM EIP_PROPOSAL, EIP_CPMIPMGT, EIP_USERMGT WHERE (EIP_PROPOSAL.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL) ";
+        sql += "AND (EIP_PROPOSAL.IDPROPOSAL = EIP_CPMIPMGT.IDPROPOSAL) AND (EIP_CPMIPMGT.IDUSERMGT = '" + UserID + "') ";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public DataTable GetMyComment(string ProposalID, string UserID)
+    {
+        string sql = "SELECT EIP_PROPOSAL.PROJ_NUM, EIP_PROPOSAL.PROJ_TITLE, TO_CHAR(EIP_PROPOSAL.DATE_INIT, 'DD-MON-YYYY') AS DATE_INIT, ";
+        sql += "TO_CHAR(EIP_PROPOSAL.DATE_SUBMIT, 'DD-MON-YYYY') AS DATE_SUBMIT, EIP_PROPOSAL.JV, EIP_PROPOSAL.SS, EIP_USERMGT.FULLNAME AS PROJ_INIT, ";
+        sql += "EIP_AUDITTRAIL.STAND, EIP_AUDITTRAIL.CCOMMENT AS COMMENTS, TO_CHAR(EIP_AUDITTRAIL.DDATE, 'DD-MON-YYYY') AS DATE_COMMENT ";
+        sql += "FROM EIP_PROPOSAL INNER JOIN ";
+        sql += "EIP_USERMGT ON EIP_PROPOSAL.IDUSERMGT = EIP_USERMGT.IDUSERMGT INNER JOIN ";
+        sql += "EIP_AUDITTRAIL ON EIP_PROPOSAL.IDPROPOSAL = EIP_AUDITTRAIL.IDPROPOSAL INNER JOIN ";
+        sql += "EIP_USERMGT EIP_USERMGT_1 ON EIP_AUDITTRAIL.IDUSERMGT = EIP_USERMGT_1.IDUSERMGT INNER JOIN ";
+        sql += "EIP_CPMIPMGT ON EIP_USERMGT_1.IDUSERMGT = EIP_CPMIPMGT.IDUSERMGT ";
+        sql += "AND EIP_USERMGT_1.IDUSERMGT = '" + UserID + "' AND EIP_PROPOSAL.IDPROPOSAL = '" + ProposalID + "'";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public DataTable ServiceLevelAgreement()
+    {
+        string sql = "SELECT EIP_CPMIPMGT.IDPROPOSAL, EIP_CPMIPMGT.IDUSERMGT, EIP_CPMIPMGT.STAND, EIP_CPMIPMGT.DATE_RECEIVED ";
+        sql += "FROM EIP_CPMIPMGT INNER JOIN EIP_PROPOSAL ON EIP_CPMIPMGT.IDPROPOSAL = EIP_PROPOSAL.IDPROPOSAL ";
+        sql += "WHERE (EIP_CPMIPMGT.STAND = '" + SupportState.iSupportApproverStandDefault + "') AND (EIP_PROPOSAL.STATUS = '" + IPStatus.Activated + "')";
+
+        return DataAccess.ExecuteQueryCommand(sql);
+    }
+
+    public static bool CorporatePlanningManagerAddCommentProcedure(appUsers CurrentUser, Proposal proposal, string comment, int stand, string dateRev)
+    {
+        bool success = false;
+        SendMail MyMail = new SendMail();
+        string[] BPOEmail = { "" };
+        string[] IPInitiatorMail = { "" };
+        IPInitiator IPInit = new IPInitiator(proposal.IDUSERMGT);
+        BusinessProcessOwner BPO = new BusinessProcessOwner(IPInit.iCompanyID);
+        IPInitiatorMail[0] = IPInit.sUserMail;
+        EPGIPTrackerComment IPTracker = new EPGIPTrackerComment();
+
+        
+
+        IPTracker.MailEPGIPTracker(proposal, CurrentUser.sUSERMAIL);
+        return success;
+        //}
+    }
+}

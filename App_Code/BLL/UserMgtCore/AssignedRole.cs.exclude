@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+
+public class AssignedRole
+{
+    private string m_sIDASSIGNEDROLES;
+    private string m_sFULLNAME;
+    private string m_sUSERMAIL;
+    private string m_sUSERNAME;
+    private int m_iFUNCTION;
+    private int m_iCOMPANY;
+    private int m_iIPLIMIT;
+    private string m_sUSERROLESID;
+
+    public AssignedRole()
+    {
+
+    }
+
+    public AssignedRole(string IDASSIGNEDROLE)
+    {
+        string sql = "SELECT IDASSIGNEDROLES, USERNAME, FULLNAME, FUNCTIONID, IDIPLIMIT, USERMAIL, COMPANYID, ROLEID ";
+        sql += "FROM EIP_ASSIGNEDROLES WHERE IDASSIGNEDROLES = '" + IDASSIGNEDROLE + "'";
+
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+
+        m_sIDASSIGNEDROLES = dt.Rows[0]["IDASSIGNEDROLES"].ToString();
+        m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+        m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+        m_sUSERNAME = dt.Rows[0]["USERNAME"].ToString();
+        m_iFUNCTION = Convert.ToInt32(dt.Rows[0]["FUNCTIONID"]);
+        m_iCOMPANY = Convert.ToInt32(dt.Rows[0]["COMPANYID"]);
+        m_iIPLIMIT = Convert.ToInt32(dt.Rows[0]["IPLIMIT"]);
+        m_sUSERROLESID = dt.Rows[0]["ROLEID"].ToString();
+
+    }
+
+    public string sIDASSIGNEDROLES
+    {
+        get
+        {
+            return m_sIDASSIGNEDROLES;
+        }
+    }
+
+    public string sFULLNAME
+    {
+        get
+        {
+            return m_sFULLNAME;
+        }
+    }
+
+    public string sUSERMAIL
+    {
+        get
+        {
+            return m_sUSERMAIL;
+        }
+    }
+
+    public string sUSERNAME
+    {
+        get
+        {
+            return m_sUSERNAME;
+        }
+    }
+
+    public int iFUNCTION
+    {
+        get
+        {
+            return m_iFUNCTION;
+        }
+    }
+
+    public int iCOMPANY
+    {
+        get
+        {
+            return m_iCOMPANY;
+        }
+    }
+
+    public int iIPLIMIT
+    {
+        get
+        {
+            return m_iIPLIMIT;
+        }
+    }
+
+    public string sUSERROLESID
+    {
+        get
+        {
+            return m_sUSERROLESID;
+        }
+    }
+
+    public bool IPRegisterDeletePrivilege(appUsers CurrentUser)
+    {
+        //IPRegisterDeletePrivilege searches the Roles assigned to a user, if the System Administrator or BPO is found,
+        //the user should be able to delete IPs.
+        //Also, if the user is an IP Initiator, and the status of the IP shows that it has not been forwarded, he/she should be able to delete the IP.
+
+        bool DeletePrivilege = false;
+
+        if ((CurrentUser.iUSERROLESID == eipUserRoles.iSystemAdministrator) || (CurrentUser.iUSERROLESID == eipUserRoles.iBusinessProcessOwner))
+        {
+            DeletePrivilege = true;
+        }
+
+        return DeletePrivilege;
+    }
+
+    public bool InsertRoles(string sUSERNAME, string sBPO, string sBOM, string sLINETEAMLEAD, string sHSE, string sBFM,
+                            string sTAX, string sLEGAL, string sSPCA, string sECONS, string sTREASURY, string sSECURITY, string sFINANCE,
+                            string sVP, string sMD, string sIPINITIATOR, string sGMREPLAN, string sREVP, string functionID,
+                            string iIDIPLIMIT, string fullName, string UserMail, string CompanyID)
+    {
+       
+        string sql = "INSERT INTO EIP_ASSIGNEDROLES (USERNAME, BPO, BOM, LINETEAMLEAD, HSE, BFM, TAX, LEGAL, SPCA, ECONS, TREASURY, ";
+        sql += "SECURITY, FINANCE, VP, MD, IPINITIATOR, GMREPLAN, REVP, FUNCTIONID, IDIPLIMIT, FULLNAME, USERMAIL, COMPANYID) VALUES ";
+        sql += "('" + sUSERNAME + "', '" + sBPO + "', '" + sBOM + "', '" + sLINETEAMLEAD + "', '" + sHSE + "', '" + sBFM + "', ";
+        sql += "'" + sTAX + "', '" + sLEGAL + "', '" + sSPCA + "', '" + sECONS + "', '" + sTREASURY + "', '" + sSECURITY + "', '" + sFINANCE + "', ";
+        sql += "'" + sVP + "', '" + sMD + "', '" + sIPINITIATOR + "', '" + sGMREPLAN + "', '" + sREVP + "', '" + functionID + "', ";
+        sql += "'" + iIDIPLIMIT + "', '" + fullName + "', '" + UserMail + "', '" + CompanyID + "')";
+
+        return DataAccess.ExecuteNonQueryCommand(sql);
+    }
+
+    public bool UpdateRoles(string sUSERNAME, string sBOM, string sLINETEAMLEAD, string sHSE, string sBFM, string sTAX,
+                            string sLEGAL, string sSPCA, string sECONS, string sTREASURY, string sSECURITY, string sFINANCE,
+                            string sMD, string sIPINITIATOR, string functionID, string iIDIPLIMIT, string CompanyID)
+    {
+       
+        string sql = "UPDATE EIP_ASSIGNEDROLES SET BOM ='" + sBOM + "', LINETEAMLEAD ='" + sLINETEAMLEAD + "', HSE ='" + sHSE + "', ";
+        sql += "BFM ='" + sBFM + "', TAX ='" + sTAX + "', SPCA ='" + sSPCA + "', ECONS ='" + sECONS + "', TREASURY ='" + sTREASURY + "', ";
+        sql += "SECURITY ='" + sSECURITY + "', FINANCE ='" + sFINANCE + "', MD ='" + sMD + "', IPINITIATOR ='" + sIPINITIATOR + "', ";
+        sql += "LEGAL ='" + sLEGAL + "', FUNCTIONID = '" + functionID + "', IDIPLIMIT = '" + iIDIPLIMIT + "', COMPANYID = '" + CompanyID + "' ";
+        sql += "WHERE UPPER(USERNAME) = '" + sUSERNAME.ToUpper() + "'";
+
+        return DataAccess.ExecuteNonQueryCommand(sql);
+    }
+}

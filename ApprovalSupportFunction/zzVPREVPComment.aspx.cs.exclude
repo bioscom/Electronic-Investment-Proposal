@@ -1,0 +1,45 @@
+﻿using System;
+
+public partial class ApprovalSupportFunction_zzVPREVPComment : System.Web.UI.Page
+{
+    Proposal proposal = new Proposal();
+    ProposalMgt core = new ProposalMgt();
+    VPComments VP = new VPComments();
+    GMREPLANComments GMRE = new GMREPLANComments();
+    appUsers CurrentUser = new appUsers();
+    //BusinessProcessOwner BPO = new BusinessProcessOwner(); IPUpdateReloadProcedure IPUpdate = new IPUpdateReloadProcedure(); IPInitiator IPInit = new IPInitiator();
+    //SupportApprovalStatus SupportApproval = new SupportApprovalStatus(); TimeDateCulture dateCulture = new TimeDateCulture(); SendMail MyMail = new SendMail();
+
+    string[] ToEmail = { "" }; string[] SenderMail = { "" }; string[] IPInitiatorMail = { "" }; string[] EPGIPTrackerMail = { "" };
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        CurrentUser = new appUsers(Apps.LoginIDNoDomain(User.Identity.Name));
+        if (Request.QueryString["ProposalID"] != null)
+        {
+            proposal = new Proposal(Request.QueryString["ProposalID"].ToString());
+            projNumberLabel.Text = proposal.PROJ_NUM; projTitleLabel.Text = proposal.PROJ_TITLE; initiatorLabel.Text = proposal.PROJ_INIT; 
+            dateLastActionedLabel.Text = proposal.DateActioned; dateSubmitLabel.Text = proposal.DATE_SUBMIT;
+            AmountJVLabel.Text = String.Format("{0:c}", proposal.JV); AmountSSLabel.Text = String.Format("{0:c}", proposal.SS);
+        }
+        if (!IsPostBack)
+        {
+            VP.LoadVPGrid(VPGridView, proposal);
+        }
+    }
+
+    protected void closeButton_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/ApprovalSupportFunction/zzAwaitingVPREVPSupportApproval.aspx");
+    }
+
+    protected void sendReminderButton_Click(object sender, EventArgs e)
+    {
+        core.REVPToVPReminder(VPGridView, proposal, CurrentUser);
+    }
+
+    protected void forwardButton_Click(object sender, EventArgs e)
+    {
+        GMRE.GMREPlanForwardsIP(VPGridView, proposal, CurrentUser);
+    } 
+}

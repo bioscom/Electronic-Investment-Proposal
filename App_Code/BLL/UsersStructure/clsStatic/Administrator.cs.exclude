@@ -1,0 +1,107 @@
+﻿using System.Data;
+
+public static class Administrator
+{
+    private static string m_sFULLNAME;
+    private static string m_sUSERMAIL;
+    private static string m_sSYSADMINEXT;
+    private static string m_sFLAG_COLOR;
+
+    private static string m_sFULLNAME2;
+    private static string m_sUSERMAIL2;
+    private static string m_sSYSADMINEXT2;
+    private static string m_sFLAG_COLOR2;
+
+    static Administrator()
+    {
+        string sql = "SELECT FULLNAME, USERMAIL, SYSADMINEXT, FLAG_COLOR FROM EIP_USERMGT WHERE ";
+        sql += "(USERROLESID = '" + eipUserRoles.iSystemAdministrator + "' AND STATUS = '" + IPStatus.Activated + "' AND FLAG_COLOR = '"+ DefaultBPO.iDefault +"')";
+        DataTable dt = DataAccess.ExecuteQueryCommand(sql);
+        if (dt.Rows.Count > 0)
+        {
+            m_sFULLNAME = dt.Rows[0]["FULLNAME"].ToString();
+            m_sUSERMAIL = dt.Rows[0]["USERMAIL"].ToString();
+            m_sSYSADMINEXT = dt.Rows[0]["SYSADMINEXT"].ToString();
+            m_sFLAG_COLOR = dt.Rows[0]["FLAG_COLOR"].ToString();
+        }
+
+        string sql2 = "SELECT FULLNAME, USERMAIL, SYSADMINEXT, FLAG_COLOR FROM EIP_USERMGT WHERE ";
+        sql2 += "(USERROLESID = '" + eipUserRoles.iSystemAdministrator + "' AND STATUS = '" + IPStatus.Activated + "' AND FLAG_COLOR = '"+ DefaultBPO.iNoneDefault +"')";
+        DataTable dt2 = DataAccess.ExecuteQueryCommand(sql2);
+        if (dt2.Rows.Count > 0)
+        {
+            m_sFULLNAME2 = dt2.Rows[0]["FULLNAME"].ToString();
+            m_sUSERMAIL2 = dt2.Rows[0]["USERMAIL"].ToString();
+            m_sSYSADMINEXT2 = dt2.Rows[0]["SYSADMINEXT"].ToString();
+            m_sFLAG_COLOR2 = dt2.Rows[0]["FLAG_COLOR"].ToString();
+        }
+    }
+
+    public static string sFULLNAME
+    {
+        get
+        {
+            return m_sFULLNAME;
+        }
+    }
+
+    public static string sUSERMAIL
+    {
+        get
+        {
+            return m_sUSERMAIL;
+        }
+    }
+
+    public static string sSYSADMINEXT
+    {
+        get
+        {
+            return m_sSYSADMINEXT;
+        }
+    }
+
+    public static string sFLAG_COLOR
+    {
+        get
+        {
+            return m_sFLAG_COLOR;
+        }
+    }
+
+
+
+
+
+    public static string sFULLNAME2
+    {
+        get
+        {
+            return m_sFULLNAME2;
+        }
+    }
+
+    public static string sUSERMAIL2
+    {
+        get
+        {
+            return m_sUSERMAIL2;
+        }
+    }
+
+    public static string sSYSADMINEXT2
+    {
+        get
+        {
+            return m_sSYSADMINEXT2;
+        }
+    }
+
+    public static string sFLAG_COLOR2
+    {
+        get
+        {
+            return m_sFLAG_COLOR2;
+        }
+    }
+}

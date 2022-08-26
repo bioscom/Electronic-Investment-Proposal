@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Investment Proposal</title>
+</head>
+<body>
+	<br />
+	        <b>Proposal Details: </b><br/>
+    <hr />
+            <b>IP Number: </b> @@ProjectNumber 
+            <br/>
+            <b>Project Title: </b> @@ProjectTitle 
+            <br />
+    <hr />
+			<b>Comment:</b>@@Comments<br />
+			<b>Stand:</b>@@Stand<br/> 
+    <hr />
+            <b>Date Initiated: </b> @@DateInit 
+            <br/>
+            <b>IP Initiator: </b> @@Initiator 
+            <br/>
+            <b>Date Forwarded: </b> @@DateForwarded 
+            <br/> <br/>
+
+            Find attached copy of @@ProjectTitle;
+</body>
+</html>
+	

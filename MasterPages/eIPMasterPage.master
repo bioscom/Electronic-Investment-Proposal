@@ -1,0 +1,152 @@
+﻿<%@ Master Language="C#" AutoEventWireup="True" CodeFile="eIPMasterPage.master.cs" Inherits="MasterPages_eIPMasterPage" EnableViewState="true" %>
+
+<%@ Register Src="~/UserControl/footer.ascx" TagPrefix="eip" TagName="footer" %>
+
+
+<%@ Register Src="../UserControl/supportContact.ascx" TagName="supportContact" TagPrefix="uc1" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Investment Proposal</title>
+    <!-- ALL demos need these css
+	<link href="../CSS/zpcal.css" rel="stylesheet" type="text/css" />
+	<link href="../CSS/template.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		body {
+			width: 778px;
+		}
+	</style> -->
+
+    <!-- Theme css 
+	<link href="../CSS/themes/aqua.css" rel="stylesheet" type="text/css" />-->
+    <script src="../JavaScript/jquery-3.1.1.min.js"></script>
+    <link href="../CSS/Styles.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../CSS/menuStyle.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../CSS/navigationStyle.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="../JavaScript/eip.js"></script>
+
+    <!-- Common JS files
+	<script language="javascript" type="text/javascript" src='../JavaScript/utils/zapatec.js'></script> -->
+
+    <!-- Custom includes -->
+    <!-- import the calendar script
+	<script language="javascript" type="text/javascript" src="../JavaScript/src/calendar.js"></script> -->
+
+    <!-- import the language module 
+	<script language="javascript" type="text/javascript" src="../JavaScript/lang/calendar-en.js"></script>-->
+
+    <script language="javascript" type="text/javascript" src="../JavaScript/CalendarPopup.js"></script>
+
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="container">
+            <div id="header">
+                
+ 		<asp:Image ID="Image1" runat="server" ImageUrl="~/Images/logo.gif"
+                    Style="z-index: 102; left: 5px; position: absolute; top: 1px;" />
+
+                <div class="title">Electronic Investment Proposal</div>
+                <div class="breadcrumb">
+                    Welcome
+                    <asp:Label ID="loggedinUserLabel" runat="server" ForeColor="Black"></asp:Label>
+                    &nbsp;| 
+                <asp:Label ID="dateLabel" runat="server" Text="" ForeColor="Black"></asp:Label>
+                    &nbsp;|
+                    <asp:HyperLink ID="logoutHyperLink" runat="server" NavigateUrl="~/Logout.aspx">Logout</asp:HyperLink>
+                    <br />
+                    Logged in as
+                    <asp:Label ID="UserRoleLabel" runat="server"></asp:Label>
+                    |
+                    <asp:LinkButton ID="lnkHomePage" runat="server" PostBackUrl="~/Index.aspx" ValidationGroup="MasterMaster">Home Page</asp:LinkButton>
+                    <br />
+                    <asp:Label ID="UserIDLabel" runat="server" Font-Bold="True" Font-Size="Smaller" ForeColor="Red"></asp:Label>
+                    &nbsp;<asp:Label ID="CompanyNameLabel" runat="server" Font-Bold="True" Font-Size="Smaller" ForeColor="Red"></asp:Label>
+                </div>
+            </div>
+            <div id="navigation">
+                <div class="firstChild">
+                </div>
+                <div class="child">
+                    <table>
+                        <tr>
+                            <td>
+                                <asp:TextBox ID="IPNameTextBox" runat="server" Width="250px" ToolTip="Enter part of the Project Name..."></asp:TextBox>
+                            </td>
+                            <td>
+                                <asp:ImageButton ID="searchButton" runat="server" ImageUrl="~/Images/gosearch.gif" Height="20px" OnClick="searchButton_Click" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="navigation1">
+            </div>
+            <div id="navigation2">
+            </div>
+            <div id="navigation3">
+                <div class="xFChild">
+                    <%--<asp:SiteMapPath ID="SiteMapPath1" runat="server">
+                    </asp:SiteMapPath>--%>
+                </div>
+                <div class="xChild">
+                    <a id="dpeBackLink" href="javascript:history.back()">
+                        <asp:ImageButton ID="ImageButton2" runat="server" Style="border: 0" ImageUrl="~/Images/bullet_back.gif" />
+                        Back</a>
+                    <%--<img alt="" src="../Images/bullet_back.gif" style="border:0"/>--%>
+                </div>
+            </div>
+            
+            <div id="master_content">
+                <div class="master_contentplaceholder_SideMenu">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
+                        <table style="width: 17em">
+                            <tr>
+                                <td>
+                                    <asp:Menu ID="UserMenu" DataSourceID="UserXmlDataSource" runat="server" DynamicHorizontalOffset="0"
+                                        StaticMenuItemStyle-BorderWidth="1px" DynamicMenuItemStyle-BorderWidth="1px"
+                                        StaticMenuItemStyle-VerticalPadding="3px" DynamicMenuItemStyle-VerticalPadding="3px"
+                                        StaticMenuItemStyle-BorderStyle="Solid" DynamicMenuItemStyle-BorderStyle="Solid"
+                                        StaticMenuItemStyle-BorderColor="Silver" DynamicMenuItemStyle-BorderColor="Silver"
+                                        Font-Names="Arial" StaticSubMenuIndent="10px" Font-Size="12px" Orientation="Vertical" StaticDisplayLevels="2" Width="99%">
+                                        <DataBindings>
+                                            <asp:MenuItemBinding DataMember="MenuItem" NavigateUrlField="NavigateUrl" TextField="Title" ToolTipField="ToolTip" />
+                                        </DataBindings>
+                                        <LevelMenuItemStyles>
+                                            <asp:MenuItemStyle CssClass="level1" />
+                                            <asp:MenuItemStyle CssClass="level2" />
+                                            <asp:MenuItemStyle CssClass="level3" />
+                                            <asp:MenuItemStyle CssClass="level4" />
+                                        </LevelMenuItemStyles>
+
+                                        <StaticHoverStyle CssClass="hoverstylestatic" />
+                                        <DynamicHoverStyle CssClass="hoverstyledynamic" />
+                                    </asp:Menu>
+                                </td>
+                            </tr>
+                        </table>
+                        <asp:XmlDataSource ID="UserXmlDataSource" TransformFile="~/CSS/TransformXSLT.xslt" XPath="MenuItems/MenuItem" runat="server" EnableCaching="False" />
+                        <uc1:supportContact ID="supportContact1" runat="server" />
+                    </asp:ContentPlaceHolder>
+                </div>
+
+                <div class="master_contentplaceholder">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer">
+            <eip:footer runat="server" ID="footer1" />
+        </div>
+    </form>
+</body>
+</html>
